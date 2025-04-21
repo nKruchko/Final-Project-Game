@@ -5,10 +5,49 @@
 //  Created by Laporionok, Rostislav (513077) on 4/17/25.
 //
 
-import SpriteKit#imageLiteral(resourceName: "Terrence.png")
+import SpriteKit
+import SwiftUI
 
 
 
-class GameScene: SKScene {
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    @State var test = SKSpriteNode()
     
+    let groundCategory: UInt32 = 1
+    
+    override func sceneDidLoad() {
+        self.physicsWorld.contactDelegate = self
+        let ground = SKNode()
+        ground.physicsBody?.categoryBitMask = groundCategory
+        ground.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        ground.physicsBody?.node?.name = "ground"
+        
+        test = SKSpriteNode(imageNamed: "Test Charecter")
+        test.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        
+        addChild(test)
+        addChild(ground)
+        
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}
+
+#Preview {
+    ContentView()
 }
