@@ -23,8 +23,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         ground.physicsBody?.node?.name = "ground"
         
-        test = SKSpriteNode(imageNamed: "Test Charecter")
+        test = SKSpriteNode(imageNamed: "Terrence")
         test.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        test.size = CGSize(width: 100, height: 100)
+        test.physicsBody = SKPhysicsBody(circleOfRadius: 50)
         
         addChild(test)
         addChild(ground)
