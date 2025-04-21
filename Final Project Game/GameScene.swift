@@ -5,7 +5,7 @@
 //  Created by Laporionok, Rostislav (513077) on 4/17/25.
 //
 
-import SpriteKit
+import SpriteKit#imageLiteral(resourceName: "Terrence.png")
 
 
 
