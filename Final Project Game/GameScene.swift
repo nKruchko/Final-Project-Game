@@ -18,6 +18,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var character: SKSpriteNode!
     var frameIndex = 0
     var characterState = "idle" //stores states: idle, walk, jump
+    
+    
+    //"idle_0", "idle_1", "idle_2", "idle_3"
     var idleFrames: [SKTexture] = []
     var walkFrames: [SKTexture] = []
     var jumpFrames: [SKTexture] = []
