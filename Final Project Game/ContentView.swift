@@ -9,16 +9,47 @@ import SwiftUI
 import SpriteKit
 
 struct ContentView: View {
+    @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
     var body: some View {
         VStack{
             GeometryReader(content: {
                 geometry in
-                SpriteView(scene: GameScene(size: geometry.size))
+                SpriteView(scene: gameScene)
+                    .onAppear {
+                        gameScene.size = geometry.size
+                        gameScene.scaleMode = .resizeFill
+                    }
                     .background(Color.black)
             })
-            ZStack{
+            ZStack {
                 Rectangle()
-                    .frame(width: .infinity, height: 250)
+                    .foregroundColor(.gray)
+                    .frame(height: 100)
+                HStack(spacing: 20) {
+                    Button(action:{gameScene.moveLeft()}){Image("arrow")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .rotationEffect(Angle(degrees: 180))
+                    }
+                    Button(action: {
+                        gameScene.jump()
+                    }) {
+                        Image("Button")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    
+                    Button(action: {
+                        gameScene.moveRight()
+                    }) {
+                        Image("arrow")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            
+                    }
+                }
+                .foregroundColor(.white)
+                .padding()
             }
         }
     }
