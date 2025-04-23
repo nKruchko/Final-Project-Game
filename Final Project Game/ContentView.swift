@@ -10,11 +10,17 @@ import SpriteKit
 
 struct ContentView: View {
     var body: some View {
-        GeometryReader(content: {
-            geometry in
-            SpriteView(scene: GameScene(size: geometry.size))
-                .background(Color.black)
-        })
+        VStack{
+            GeometryReader(content: {
+                geometry in
+                SpriteView(scene: GameScene(size: geometry.size))
+                    .background(Color.black)
+            })
+            ZStack{
+                Rectangle()
+                    .frame(width: .infinity, height: 250)
+            }
+        }
     }
 }
 
