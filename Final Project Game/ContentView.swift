@@ -14,7 +14,11 @@ struct ContentView: View {
         VStack{
             GeometryReader(content: {
                 geometry in
-                SpriteView(scene: GameScene(size: geometry.size))
+                SpriteView(scene: gameScene)
+                    .onAppear {
+                        gameScene.size = geometry.size
+                        gameScene.scaleMode = .resizeFill
+                    }
                     .background(Color.black)
             })
             ZStack {
