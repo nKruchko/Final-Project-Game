@@ -9,6 +9,7 @@ import SwiftUI
 import SpriteKit
 
 struct ContentView: View {
+    @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
     var body: some View {
         VStack{
             GeometryReader(content: {
@@ -16,9 +17,35 @@ struct ContentView: View {
                 SpriteView(scene: GameScene(size: geometry.size))
                     .background(Color.black)
             })
-            ZStack{
+            ZStack {
                 Rectangle()
-                    .frame(width: .infinity, height: 250)
+                    .foregroundColor(.gray)
+                    .frame(height: 100)
+                HStack(spacing: 20) {
+                    Button(action:{gameScene.moveLeft()}){Image("arrow")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .rotationEffect(Angle(degrees: 180))
+                    }
+                    Button(action: {
+                        gameScene.jump()
+                    }) {
+                        Image("jumpButton")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                    }
+                    
+                    Button(action: {
+                        gameScene.moveRight()
+                    }) {
+                        Image("arrow")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            
+                    }
+                }
+                .foregroundColor(.white)
+                .padding()
             }
         }
     }
