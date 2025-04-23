@@ -13,6 +13,7 @@ import SwiftUI
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var test = SKSpriteNode()
+    var player = SKSpriteNode()
     
     
     var character: SKSpriteNode!
@@ -21,7 +22,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     //"idle_0", "idle_1", "idle_2", "idle_3"
-    var idleFrames: [SKTexture] = []
+    var frameStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
+    var idleFrames: [SKTexture] { frameStrings.map {SKTexture(imageNamed: $0) } }
+    
     var walkFrames: [SKTexture] = []
     var jumpFrames: [SKTexture] = []
     
@@ -36,33 +39,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         ground.physicsBody?.node?.name = "ground"
         
-        test = SKSpriteNode(imageNamed: "Terrence")
-        test.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        test.size = CGSize(width: 100, height: 100)
-        test.physicsBody = SKPhysicsBody(circleOfRadius: 50)
         
-        addChild(test)
+//        player = SKSpriteNode(imageNamed: "Farmer_Idle_0")
+//        player.position = CGPoint(x: size.width / 2, y: size.height / 2)
+//        player.size = CGSize(width: 50, height: 50)
+//        player.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 40))
+//        
+        
         addChild(ground)
+      //  addChild(player)
         
     }
     override func didMove(to view: SKView) {
-        loadFrames()
         character = SKSpriteNode(texture: idleFrames[0])
+        character.size = CGSize(width: 50, height: 50)
         character.position = CGPoint(x: size.width/2,y: size.height/2)
+        character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 40))
+        
         addChild(character)
         
         startIdleAnimation()
     }
-    func loadFrames(){
-        for i in 0...3{
-            idleFrames.append(SKTexture(imageNamed: "idle\(i)"))
-            walkFrames.append(SKTexture(imageNamed: "walk\(i)"))
-            jumpFrames.append(SKTexture(imageNamed: "jump\(i)"))
-        }
-    }
+
     func startIdleAnimation(){
         characterState = "idle"
-        character.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.2)),withKey: "idle")
+        character.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.5)),withKey: "idle")
     }
     func moveLeft(){
         characterState = "walk"
