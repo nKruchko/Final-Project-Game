@@ -14,6 +14,7 @@ import SwiftUI
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var test = SKSpriteNode()
     var player = SKSpriteNode()
+    var theGround = SKSpriteNode()
     
     
     var character: SKSpriteNode!
@@ -22,8 +23,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     //"idle_0", "idle_1", "idle_2", "idle_3"
-    var frameStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
-    var idleFrames: [SKTexture] { frameStrings.map {SKTexture(imageNamed: $0) } }
+    var idleStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
+    var idleFrames: [SKTexture] { idleStrings.map {SKTexture(imageNamed: $0) } } //Used AI for this
     
     var walkFrames: [SKTexture] = []
     var jumpFrames: [SKTexture] = []
@@ -39,15 +40,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         ground.physicsBody?.node?.name = "ground"
         
+        theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
+        theGround = SKSpriteNode(color: .orange, size: CGSize(width: 500, height: 20))
         
-//        player = SKSpriteNode(imageNamed: "Farmer_Idle_0")
-//        player.position = CGPoint(x: size.width / 2, y: size.height / 2)
-//        player.size = CGSize(width: 50, height: 50)
-//        player.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 40))
-//        
+        theGround.physicsBody?.node?.name = "theGround"
+        theGround.position = CGPoint(x: size.width / 2, y: 100)
+      //  theGround.physicsBody?.categoryBitMask =
+        
+      //  theGround.physicsBody?.affectedByGravity = false
+        
         
         addChild(ground)
-      //  addChild(player)
+        addChild(theGround)
         
     }
     override func didMove(to view: SKView) {
