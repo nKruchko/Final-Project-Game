@@ -30,9 +30,9 @@ struct ContentView: View {
                     Button(action: {
                         gameScene.jump()
                     }) {
-                        Image("jumpButton")
+                        Image("Button")
                             .resizable()
-                            .frame(width: 50, height: 50)
+                            .frame(width: 100, height: 100)
                     }
                     
                     Button(action: {
