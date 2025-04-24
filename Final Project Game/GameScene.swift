@@ -24,10 +24,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //"idle_0", "idle_1", "idle_2", "idle_3"
     var idleStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
+<<<<<<< HEAD
     var idleFrames: [SKTexture] { idleStrings.map {SKTexture(imageNamed: $0) } } //Used AI for this
+=======
+    var idleFrames: [SKTexture] { idleStrings.map {SKTexture(imageNamed: $0) } }
+    var walkStrings = ["Farmer_Walk_0","Farmer_Walk_1"]
+>>>>>>> main
     
-    var walkFrames: [SKTexture] = []
-    var jumpFrames: [SKTexture] = []
+    var walkFrames: [SKTexture] { walkStrings.map {SKTexture(imageNamed: $0) } }
+    var jumpStrings = ["Farmer_Jump_Frame"]
+    var jumpFrames: [SKTexture] { jumpStrings.map {SKTexture(imageNamed: $0) } }
     
     
     
@@ -75,6 +81,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
         character.run(SKAction.moveBy(x: -10, y: 0, duration: 0.1))
+        //return to idle
+        run(SKAction.wait(forDuration: 0.5)){
+            self.startIdleAnimation()
+        }
 
     }
     func moveRight(){
@@ -83,6 +93,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
         character.run(SKAction.moveBy(x: 10, y: 0, duration: 0.1))
+        //return to idle
+        run(SKAction.wait(forDuration: 0.5)){
+            self.startIdleAnimation()
+        }
 
     }
     func jump(){
