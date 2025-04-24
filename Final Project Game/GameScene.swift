@@ -73,6 +73,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
         character.run(SKAction.moveBy(x: -10, y: 0, duration: 0.1))
+        //return to idle
+        run(SKAction.wait(forDuration: 0.5)){
+            self.startIdleAnimation()
+        }
 
     }
     func moveRight(){
@@ -81,6 +85,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
         character.run(SKAction.moveBy(x: 10, y: 0, duration: 0.1))
+        //return to idle
+        run(SKAction.wait(forDuration: 0.5)){
+            self.startIdleAnimation()
+        }
 
     }
     func jump(){
