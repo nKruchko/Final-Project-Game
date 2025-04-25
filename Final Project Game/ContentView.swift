@@ -31,6 +31,7 @@ struct ContentView: View {
                             .frame(width: 50, height: 50)
                             .rotationEffect(Angle(degrees: 180))
                     }
+                    .buttonRepeatBehavior(.enabled)
                     Button(action: {
                         gameScene.jump()
                     }) {
@@ -38,6 +39,8 @@ struct ContentView: View {
                             .resizable()
                             .frame(width: 100, height: 100)
                     }
+                    .buttonRepeatBehavior(.enabled)
+
                     
                     Button(action: {
                         gameScene.moveRight()
@@ -45,8 +48,9 @@ struct ContentView: View {
                         Image("arrow")
                             .resizable()
                             .frame(width: 50, height: 50)
-                            
                     }
+                    .buttonRepeatBehavior(.enabled)
+
                 }
                 .foregroundColor(.white)
                 .padding()

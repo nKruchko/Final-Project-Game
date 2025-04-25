@@ -77,7 +77,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.xScale = -1 //flips character to the left
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: -10, y: 0, duration: 0.1))
+        character.run(SKAction.moveBy(x: -32, y: 0, duration: 0.1))
         //return to idle
         run(SKAction.wait(forDuration: 0.5)){
             self.startIdleAnimation()
@@ -89,7 +89,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.xScale = 1 //flips character to the right
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: 10, y: 0, duration: 0.1))
+        character.run(SKAction.moveBy(x: 32, y: 0, duration: 0.1))
         //return to idle
         run(SKAction.wait(forDuration: 0.5)){
             self.startIdleAnimation()
@@ -100,8 +100,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         characterState = "jump"
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: jumpFrames, timePerFrame: 0.1)))
-        let jumpUp = SKAction.moveBy(x: 0, y: 50, duration: 0.2)
-        let jumpDown = SKAction.moveBy(x: 0, y: -50, duration: 0.2)
+        let jumpUp = SKAction.moveBy(x: 0, y: 64, duration: 0.2)
+        let jumpDown = SKAction.moveBy(x: 0, y: -64, duration: 0.2)
         let sequence = SKAction.sequence([jumpUp,jumpDown])
         character.run(sequence)
         
