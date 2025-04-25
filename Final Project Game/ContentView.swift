@@ -28,12 +28,10 @@ struct ContentView: View {
 //                    .foregroundColor(.gray)
 //                    .frame(height: 100)
                 HStack(spacing: 20) {
-                    Button(action:{gameScene.moveLeft()}){Image("arrow")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .rotationEffect(Angle(degrees: 180))
+                    MoveButton{
+                        gameScene.moveLeft()
                     }
-                    .buttonRepeatBehavior(.enabled)
+                    .rotationEffect(Angle(degrees: 180))
                     Button(action: {
                         gameScene.jump()
                     }) {
@@ -52,14 +50,9 @@ struct ContentView: View {
                     }
                     .buttonRepeatBehavior(.enabled)
                     
-                    Button(action: {
+                    MoveButton{
                         gameScene.moveRight()
-                    }) {
-                        Image("arrow")
-                            .resizable()
-                            .frame(width: 50, height: 50)
                     }
-                    .buttonRepeatBehavior(.enabled)
 
                 }
                 .foregroundColor(.white)
@@ -67,6 +60,33 @@ struct ContentView: View {
             }
             .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
         }
+    }
+}
+struct MoveButton: View {
+    @State private var isPressed = false
+    @State private var timer: Timer? = nil
+    let action: () -> Void
+
+    var body: some View {
+        Image(isPressed ? "arrowPressed" : "arrow")
+            .resizable()
+            .frame(width: 50, height: 50)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        if !isPressed {
+                            isPressed = true
+                            timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+                                action()
+                            }
+                        }
+                    }
+                    .onEnded { _ in
+                        isPressed = false
+                        timer?.invalidate()
+                        timer = nil
+                    }
+            )
     }
 }
 
