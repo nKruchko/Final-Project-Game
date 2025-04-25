@@ -86,7 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.xScale = -1 //flips character to the left
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: -32, y: 0, duration: 0.1))
+        character.run(SKAction.moveBy(x: -16, y: 0, duration: 0.1))
         //return to idle
         run(SKAction.wait(forDuration: 0.5)){
             self.startIdleAnimation()
@@ -98,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.xScale = 1 //flips character to the right
         character.removeAllActions()
         character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: 32, y: 0, duration: 0.1))
+        character.run(SKAction.moveBy(x: 16, y: 0, duration: 0.1))
         //return to idle
         run(SKAction.wait(forDuration: 0.5)){
             self.startIdleAnimation()
@@ -119,6 +119,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.startIdleAnimation()
         }
 
+    }
+    func use() {
+        print("Use Button Pressed")
     }
     
 }
