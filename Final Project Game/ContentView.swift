@@ -28,18 +28,21 @@ struct ContentView: View {
 //                    .foregroundColor(.gray)
 //                    .frame(height: 100)
                 HStack(spacing: 20) {
-                    MoveButton{
-                        gameScene.moveLeft()
-                    }
-                    .rotationEffect(Angle(degrees: 180))
-                    Button(action: {
+                    MoveButton(
+                        action: { gameScene.moveLeft() },
+                        onRelease: { gameScene.stopMoving() })
+                    .scaleEffect(x:-1)
+                    
+                    JumpButton {
                         gameScene.jump()
+<<<<<<< HEAD
                     }) {
                         Image("B_Jump_0")
                             .resizable()
                             .frame(width: 100, height: 100)
+=======
+>>>>>>> main
                     }
-                    .buttonRepeatBehavior(.enabled)
 
                     Button(action: {
                         gameScene.use()
@@ -50,10 +53,10 @@ struct ContentView: View {
                     }
                     .buttonRepeatBehavior(.enabled)
                     
-                    MoveButton{
-                        gameScene.moveRight()
-                    }
-
+                    MoveButton(
+                        action: { gameScene.moveRight() },
+                        onRelease: { gameScene.stopMoving() }
+                    )
                 }
                 .foregroundColor(.white)
                 .padding()
@@ -66,9 +69,10 @@ struct MoveButton: View {
     @State private var isPressed = false
     @State private var timer: Timer? = nil
     let action: () -> Void
+    let onRelease: () -> Void
 
     var body: some View {
-        Image(isPressed ? "arrowPressed" : "arrow")
+        Image(isPressed ? "B_Arrow_1" : "B_Arrow_0")
             .resizable()
             .frame(width: 50, height: 50)
             .gesture(
@@ -85,10 +89,35 @@ struct MoveButton: View {
                         isPressed = false
                         timer?.invalidate()
                         timer = nil
+                        onRelease()
                     }
             )
     }
 }
+struct JumpButton: View {
+    @State private var isPressed = false
+    let action: () -> Void
+
+    var body: some View {
+        Image(isPressed ? "B_Jump_1" : "B_Jump_0")
+            .resizable()
+            .frame(width: 100, height: 100)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        if !isPressed {
+                            isPressed = true
+                            action() // Call jump ONCE immediately when pressed
+                        }
+                    }
+                    .onEnded { _ in
+                        isPressed = false
+                    }
+            )
+            .offset(y:-10)
+    }
+}
+
 
 #Preview {
     ContentView()
