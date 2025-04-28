@@ -28,18 +28,13 @@ struct ContentView: View {
                 HStack(spacing: 20) {
                     MoveButton(
                         action: { gameScene.moveLeft() },
-                        onRelease: { gameScene.stopMoving() }
-                    )
-
+                        onRelease: { gameScene.stopMoving() })
                     .rotationEffect(Angle(degrees: 180))
-                    Button(action: {
+                    
+                    
+                    JumpButton {
                         gameScene.jump()
-                    }) {
-                        Image("")
-                            .resizable()
-                            .frame(width: 100, height: 100)
                     }
-                    .buttonRepeatBehavior(.enabled)
 
                     
                     MoveButton(
@@ -82,6 +77,30 @@ struct MoveButton: View {
             )
     }
 }
+struct JumpButton: View {
+    @State private var isPressed = false
+    let action: () -> Void
+
+    var body: some View {
+        Image(isPressed ? "B_Jump_1" : "B_Jump_0")
+            .resizable()
+            .frame(width: 100, height: 100)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        if !isPressed {
+                            isPressed = true
+                            action() // Call jump ONCE immediately when pressed
+                        }
+                    }
+                    .onEnded { _ in
+                        isPressed = false
+                    }
+            )
+            .offset(y:-10)
+    }
+}
+
 
 #Preview {
     ContentView()
