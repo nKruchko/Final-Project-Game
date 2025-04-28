@@ -26,12 +26,12 @@ struct ContentView: View {
                     .foregroundColor(.gray)
                     .frame(height: 100)
                 HStack(spacing: 20) {
-                    Button(action:{gameScene.moveLeft()}){Image("arrow")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .rotationEffect(Angle(degrees: 180))
-                    }
-                    .buttonRepeatBehavior(.enabled)
+                    MoveButton(
+                        action: { gameScene.moveLeft() },
+                        onRelease: { gameScene.stopMoving() }
+                    )
+
+                    .rotationEffect(Angle(degrees: 180))
                     Button(action: {
                         gameScene.jump()
                     }) {
@@ -42,20 +42,44 @@ struct ContentView: View {
                     .buttonRepeatBehavior(.enabled)
 
                     
-                    Button(action: {
-                        gameScene.moveRight()
-                    }) {
-                        Image("arrow")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                    }
-                    .buttonRepeatBehavior(.enabled)
-
+                    MoveButton(
+                        action: { gameScene.moveRight() },
+                        onRelease: { gameScene.stopMoving() }
+                    )
                 }
                 .foregroundColor(.white)
                 .padding()
             }
         }
+    }
+}
+struct MoveButton: View {
+    @State private var isPressed = false
+    @State private var timer: Timer? = nil
+    let action: () -> Void
+    let onRelease: () -> Void
+
+    var body: some View {
+        Image(isPressed ? "arrowPressed" : "arrow")
+            .resizable()
+            .frame(width: 50, height: 50)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        if !isPressed {
+                            isPressed = true
+                            timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+                                action()
+                            }
+                        }
+                    }
+                    .onEnded { _ in
+                        isPressed = false
+                        timer?.invalidate()
+                        timer = nil
+                        onRelease()
+                    }
+            )
     }
 }
 

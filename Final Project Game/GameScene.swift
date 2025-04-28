@@ -9,8 +9,6 @@ import SpriteKit
 import SwiftUI
 
 
-
-
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var test = SKSpriteNode()
     var player = SKSpriteNode()
@@ -26,7 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var idleStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
     var idleFrames: [SKTexture] { idleStrings.map {SKTexture(imageNamed: $0) } } //Used AI for this
     
-    var walkStrings = ["Farmer_Walk_0","Farmer_Walk_1"]
+    var walkStrings = ["Farmer_Walk_0","Farmer_Walk_1","Farmer_Walk_2","Farmer_Walk_3"]
     var walkFrames: [SKTexture] { walkStrings.map {SKTexture(imageNamed: $0) } }
     
     var jumpStrings = ["Farmer_Jump_Frame"]
@@ -35,6 +33,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     let groundCategory: UInt32 = 1
+    let objectCategory: UInt32 = 2
     
     override func sceneDidLoad() {
         self.physicsWorld.contactDelegate = self
@@ -43,14 +42,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         ground.physicsBody?.node?.name = "ground"
         
-        theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
         theGround = SKSpriteNode(color: .orange, size: CGSize(width: 500, height: 20))
-        
-        theGround.physicsBody?.node?.name = "theGround"
         theGround.position = CGPoint(x: size.width / 2, y: 100)
-      //  theGround.physicsBody?.categoryBitMask =
+        theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
+        theGround.physicsBody?.categoryBitMask = groundCategory
+        theGround.physicsBody?.collisionBitMask = objectCategory
+        theGround.physicsBody?.node?.name = "theGround"
+        theGround.physicsBody?.affectedByGravity = false
+        theGround.physicsBody?.isDynamic = false
         
-      //  theGround.physicsBody?.affectedByGravity = false
+        
+        
+        
+        
         
         
         addChild(ground)
@@ -61,7 +65,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
         character.position = CGPoint(x: size.width/2,y: size.height/2)
+        
+        
         character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 40))
+        character.physicsBody?.collisionBitMask = groundCategory
+        character.physicsBody?.contactTestBitMask = groundCategory
+        character.physicsBody?.categoryBitMask = objectCategory
         
         addChild(character)
         
@@ -72,30 +81,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         characterState = "idle"
         character.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.5)),withKey: "idle")
     }
-    func moveLeft(){
-        characterState = "walk"
-        character.xScale = -1 //flips character to the left
-        character.removeAllActions()
-        character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: -32, y: 0, duration: 0.1))
-        //return to idle
-        run(SKAction.wait(forDuration: 0.5)){
-            self.startIdleAnimation()
+    func moveLeft() {
+        if characterState != "walk" {
+            characterState = "walk"
+            character.xScale = -1 // flip left
+            character.removeAllActions()
+            character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)), withKey: "walk")
         }
-
-    }
-    func moveRight(){
-        characterState = "walk"
-        character.xScale = 1 //flips character to the right
-        character.removeAllActions()
-        character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: 32, y: 0, duration: 0.1))
-        //return to idle
-        run(SKAction.wait(forDuration: 0.5)){
-            self.startIdleAnimation()
+        character.run(SKAction.moveBy(x: -8, y: 0, duration: 0.1))
+    }    
+    func moveRight() {
+        if characterState != "walk" {
+            characterState = "walk"
+            character.xScale = 1 // flip right
+            character.removeAllActions()
+            character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)), withKey: "walk")
         }
-
+        character.run(SKAction.moveBy(x: 8, y: 0, duration: 0.1))
     }
+
+
     func jump(){
         characterState = "jump"
         character.removeAllActions()
@@ -109,20 +114,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.5)){
             self.startIdleAnimation()
         }
-
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    func stopMoving() {
+        if characterState != "idle" {
+            characterState = "idle"
+            character.removeAllActions()
+            startIdleAnimation()
+        }
+    }
+
     
 }
 
