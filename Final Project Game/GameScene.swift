@@ -24,7 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var idleStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
     var idleFrames: [SKTexture] { idleStrings.map {SKTexture(imageNamed: $0) } } //Used AI for this
     
-    var walkStrings = ["Farmer_Walk_0","Farmer_Walk_1"]
+    var walkStrings = ["Farmer_Walk_0","Farmer_Walk_1","Farmer_Walk_2","Farmer_Walk_3"]
     var walkFrames: [SKTexture] { walkStrings.map {SKTexture(imageNamed: $0) } }
     
     var jumpStrings = ["Farmer_Jump_Frame"]
