@@ -29,8 +29,7 @@ struct ContentView: View {
                     MoveButton(
                         action: { gameScene.moveLeft() },
                         onRelease: { gameScene.stopMoving() })
-                    .rotationEffect(Angle(degrees: 180))
-                    
+                    .scaleEffect(x:-1)
                     
                     JumpButton {
                         gameScene.jump()
@@ -55,7 +54,7 @@ struct MoveButton: View {
     let onRelease: () -> Void
 
     var body: some View {
-        Image(isPressed ? "arrowPressed" : "arrow")
+        Image(isPressed ? "B_Arrow_1" : "B_Arrow_0")
             .resizable()
             .frame(width: 50, height: 50)
             .gesture(
