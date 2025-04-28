@@ -26,9 +26,11 @@ struct ContentView: View {
                     .foregroundColor(.gray)
                     .frame(height: 100)
                 HStack(spacing: 20) {
-                    MoveButton{
-                        gameScene.moveLeft()
-                    }
+                    MoveButton(
+                        action: { gameScene.moveLeft() },
+                        onRelease: { gameScene.stopMoving() }
+                    )
+
                     .rotationEffect(Angle(degrees: 180))
                     Button(action: {
                         gameScene.jump()
@@ -40,10 +42,10 @@ struct ContentView: View {
                     .buttonRepeatBehavior(.enabled)
 
                     
-                    MoveButton{
-                        gameScene.moveRight()
-                    }
-
+                    MoveButton(
+                        action: { gameScene.moveRight() },
+                        onRelease: { gameScene.stopMoving() }
+                    )
                 }
                 .foregroundColor(.white)
                 .padding()
@@ -55,6 +57,7 @@ struct MoveButton: View {
     @State private var isPressed = false
     @State private var timer: Timer? = nil
     let action: () -> Void
+    let onRelease: () -> Void
 
     var body: some View {
         Image(isPressed ? "arrowPressed" : "arrow")
@@ -74,6 +77,7 @@ struct MoveButton: View {
                         isPressed = false
                         timer?.invalidate()
                         timer = nil
+                        onRelease()
                     }
             )
     }

@@ -81,30 +81,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         characterState = "idle"
         character.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.5)),withKey: "idle")
     }
-    func moveLeft(){
-        characterState = "walk"
-        character.xScale = -1 //flips character to the left
-        character.removeAllActions()
-        character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: -32, y: 0, duration: 0.1))
-        //return to idle
-        run(SKAction.wait(forDuration: 0.5)){
-            self.startIdleAnimation()
+    func moveLeft() {
+        if characterState != "walk" {
+            characterState = "walk"
+            character.xScale = -1 // flip left
+            character.removeAllActions()
+            character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)), withKey: "walk")
         }
-
-    }
-    func moveRight(){
-        characterState = "walk"
-        character.xScale = 1 //flips character to the right
-        character.removeAllActions()
-        character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)),withKey: "walk")
-        character.run(SKAction.moveBy(x: 32, y: 0, duration: 0.1))
-        //return to idle
-        run(SKAction.wait(forDuration: 0.5)){
-            self.startIdleAnimation()
+        character.run(SKAction.moveBy(x: -8, y: 0, duration: 0.1))
+    }    
+    func moveRight() {
+        if characterState != "walk" {
+            characterState = "walk"
+            character.xScale = 1 // flip right
+            character.removeAllActions()
+            character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)), withKey: "walk")
         }
-
+        character.run(SKAction.moveBy(x: 8, y: 0, duration: 0.1))
     }
+
+
     func jump(){
         characterState = "jump"
         character.removeAllActions()
@@ -118,8 +114,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.wait(forDuration: 0.5)){
             self.startIdleAnimation()
         }
-
     }
+    func stopMoving() {
+        if characterState != "idle" {
+            characterState = "idle"
+            character.removeAllActions()
+            startIdleAnimation()
+        }
+    }
+
     
 }
 
