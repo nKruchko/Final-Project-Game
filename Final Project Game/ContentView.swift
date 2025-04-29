@@ -34,21 +34,29 @@ struct ContentView: View {
                 
                 //left, jump, right buttons
                 HStack(spacing: 16) {
-                    MoveButton(
-                        action: { gameScene.moveLeft() },
-                        onRelease: { gameScene.stopMoving() })
-                    .scaleEffect(x:-1)
-                    
-                    JumpButton {
-                        gameScene.jump()
+                    Color.gray
+                        .ignoresSafeArea()
+                    Rectangle()
+                        .foregroundColor(.gray)
+                        .frame(height: 100)
+                    HStack(spacing: 20) {
+                        
+                        MoveButton(
+                            action: { gameScene.moveLeft() },
+                            onRelease: { gameScene.stopMoving() })
+                        .scaleEffect(x:-1)
+                        
+                        JumpButton {
+                            gameScene.jump()
+                        }
+                        
+                        MoveButton(
+                            action: { gameScene.moveRight() },
+                            onRelease: { gameScene.stopMoving() }
+                        )
                     }
-
-                    
-                    MoveButton(
-                        action: { gameScene.moveRight() },
-                        onRelease: { gameScene.stopMoving() }
-                    )
                 }
+                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
             }
         }
     }
@@ -107,6 +115,7 @@ struct JumpButton: View {
                     }
             )
             .offset(y:-16) //fixes it being slightly off center
+        
     }
 }
 
