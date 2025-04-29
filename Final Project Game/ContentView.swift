@@ -55,9 +55,24 @@ struct ContentView: View {
                             onRelease: { gameScene.stopMoving() }
                         )
                     }
+
+                    Button(action: {
+                        gameScene.use()
+                    }) {
+                        Image("Button")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    .buttonRepeatBehavior(.enabled)
+                    
+                    MoveButton(
+                        action: { gameScene.moveRight() },
+                        onRelease: { gameScene.stopMoving() }
+                    )
                 }
                 .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
             }
+            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
         }
     }
 }
