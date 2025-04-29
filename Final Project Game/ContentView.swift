@@ -22,9 +22,11 @@ struct ContentView: View {
                     .background(Color.black)
             })
             ZStack {
-                Rectangle()
-                    .foregroundColor(.gray)
-                    .frame(height: 100)
+                Color.gray
+                    .ignoresSafeArea()
+//                Rectangle()
+//                    .foregroundColor(.gray)
+//                    .frame(height: 100)
                 HStack(spacing: 20) {
                     MoveButton(
                         action: { gameScene.moveLeft() },
@@ -33,8 +35,20 @@ struct ContentView: View {
                     
                     JumpButton {
                         gameScene.jump()
+                    }) {
+                        Image("B_Jump_0")
+                            .resizable()
+                            .frame(width: 100, height: 100)
                     }
 
+                    Button(action: {
+                        gameScene.use()
+                    }) {
+                        Image("Button")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    .buttonRepeatBehavior(.enabled)
                     
                     MoveButton(
                         action: { gameScene.moveRight() },
@@ -44,6 +58,7 @@ struct ContentView: View {
                 .foregroundColor(.white)
                 .padding()
             }
+            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
         }
     }
 }

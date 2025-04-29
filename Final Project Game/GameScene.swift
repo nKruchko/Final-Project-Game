@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var test = SKSpriteNode()
     var player = SKSpriteNode()
     var theGround = SKSpriteNode()
+    var lastPosition: CGPoint = .zero
     
     
     var character: SKSpriteNode!
@@ -39,8 +40,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         let ground = SKNode()
         ground.physicsBody?.categoryBitMask = groundCategory
-        ground.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        ground.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: 0, y: 0, width: size.width + 90, height: size.height))
         ground.physicsBody?.node?.name = "ground"
+        addChild(ground)
         
         theGround = SKSpriteNode(color: .orange, size: CGSize(width: 500, height: 20))
         theGround.position = CGPoint(x: size.width / 2, y: 100)
@@ -50,6 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         theGround.physicsBody?.node?.name = "theGround"
         theGround.physicsBody?.affectedByGravity = false
         theGround.physicsBody?.isDynamic = false
+        theGround.physicsBody?.allowsRotation = false
         
         
         
@@ -57,17 +60,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         
-        addChild(ground)
         addChild(theGround)
         
     }
     override func didMove(to view: SKView) {
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
-        character.position = CGPoint(x: size.width/2,y: size.height/2)
+        character.position = CGPoint(x: size.width / 2,y: size.height / 2)
         
         
-        character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 40))
+        character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 50, height: 50))
         character.physicsBody?.collisionBitMask = groundCategory
         character.physicsBody?.contactTestBitMask = groundCategory
         character.physicsBody?.categoryBitMask = objectCategory
@@ -75,12 +77,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(character)
         
         startIdleAnimation()
+        print(frame)
+        print(character.position)
+        
+        lastPosition = character.position
     }
 
     func startIdleAnimation(){
         characterState = "idle"
         character.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.5)),withKey: "idle")
     }
+
     func moveLeft() {
         if characterState != "walk" {
             characterState = "walk"
@@ -115,6 +122,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.startIdleAnimation()
         }
     }
+
+    func use() {
+        print("Use Button Pressed")
+    }
+    override func update(_ currentTime: TimeInterval) {
+        if(character.position != lastPosition) {
+            print("Character X Position: \(Int(character.position.x))")
+            lastPosition = character.position
+            print("Frame: \(frame)")
+        }
+    }
+
     func stopMoving() {
         if characterState != "idle" {
             characterState = "idle"
