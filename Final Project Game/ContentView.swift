@@ -24,17 +24,17 @@ struct ContentView: View {
                         gameScene.scaleMode = .resizeFill
                     }
                     .background(Color.black)
+                    .ignoresSafeArea()
             })
             
             //stack of controls and buttons
             ZStack {
-                Rectangle()
-                    .foregroundColor(Color(.lightGray))
-                    .frame(height: 128)
+                Color.gray
+                .ignoresSafeArea()
                 
                 //left, jump, right buttons
                 HStack(spacing: 0) {
-                    Color.gray
+                        Color.gray
                         .ignoresSafeArea()
                         MoveButton(
                             action: { gameScene.moveLeft() },
@@ -57,9 +57,10 @@ struct ContentView: View {
                         onRelease: { gameScene.stopMoving() }
                     )
                 }//end hstack
-                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
+                .frame(width: 100, height: 100)
                 
             }//end zstack
+            .frame(width: 500, height: 150)
         }
     }
 }
@@ -149,7 +150,7 @@ struct UseButton: View {
 
 
 
-
+//USE OPTION+COMMAND+RETURN to bring preview back
 #Preview {
     ContentView()
 }
