@@ -33,46 +33,33 @@ struct ContentView: View {
                     .frame(height: 128)
                 
                 //left, jump, right buttons
-                HStack(spacing: 16) {
+                HStack(spacing: 0) {
                     Color.gray
                         .ignoresSafeArea()
-                    Rectangle()
-                        .foregroundColor(.gray)
-                        .frame(height: 100)
-                    HStack(spacing: 20) {
-                        
                         MoveButton(
                             action: { gameScene.moveLeft() },
                             onRelease: { gameScene.stopMoving() })
                         .scaleEffect(x:-1)
                         
-                        JumpButton {
-                            gameScene.jump()
-                        }
                         
-                        MoveButton(
-                            action: { gameScene.moveRight() },
-                            onRelease: { gameScene.stopMoving() }
-                        )
-                    }
-
-                    Button(action: {
-                        gameScene.use()
-                    }) {
-                        Image("Button")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                    }
-                    .buttonRepeatBehavior(.enabled)
                     
+                    JumpButton {
+                        gameScene.jump()
+                    }                    
+                    UseButton{
+                        gameScene.use()
+                    }
+                    
+                        
+                        
                     MoveButton(
                         action: { gameScene.moveRight() },
                         onRelease: { gameScene.stopMoving() }
                     )
-                }
+                }//end hstack
                 .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-            }
-            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
+                
+            }//end zstack
         }
     }
 }
@@ -115,7 +102,7 @@ struct JumpButton: View {
     var body: some View {
         Image(isPressed ? "B_Jump_1" : "B_Jump_0")
             .resizable()
-            .frame(width: 160, height: 160)
+            .frame(width: 120, height: 120)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
@@ -133,6 +120,34 @@ struct JumpButton: View {
         
     }
 }
+
+struct UseButton: View {
+    @State private var isPressed = false
+    let action: () -> Void
+
+    var body: some View {
+        Image(isPressed ? "B_Use_0" : "B_Use_1")
+            .resizable()
+            .frame(width: 120, height: 120)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        if !isPressed {
+                            isPressed = true
+                            // calls use once when pressed
+                            action()
+                        }
+                    }
+                    .onEnded { _ in
+                        isPressed = false
+                    }
+            )
+            .offset(y:-16)
+    }
+}
+
+
+
 
 
 #Preview {
