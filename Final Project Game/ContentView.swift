@@ -35,13 +35,10 @@ struct ContentView: View {
                     
                     JumpButton {
                         gameScene.jump()
-<<<<<<< HEAD
                     }) {
                         Image("B_Jump_0")
                             .resizable()
                             .frame(width: 100, height: 100)
-=======
->>>>>>> main
                     }
 
                     Button(action: {
