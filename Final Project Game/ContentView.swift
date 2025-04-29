@@ -9,9 +9,13 @@ import SwiftUI
 import SpriteKit
 
 struct ContentView: View {
+    //game screen
     @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
+    
+    //screen elements
     var body: some View {
         VStack{
+            //game scene renderer
             GeometryReader(content: {
                 geometry in
                 SpriteView(scene: gameScene)
@@ -21,11 +25,15 @@ struct ContentView: View {
                     }
                     .background(Color.black)
             })
+            
+            //stack of controls and buttons
             ZStack {
                 Rectangle()
-                    .foregroundColor(.gray)
-                    .frame(height: 100)
-                HStack(spacing: 20) {
+                    .foregroundColor(Color(.lightGray))
+                    .frame(height: 128)
+                
+                //left, jump, right buttons
+                HStack(spacing: 16) {
                     MoveButton(
                         action: { gameScene.moveLeft() },
                         onRelease: { gameScene.stopMoving() })
@@ -41,22 +49,23 @@ struct ContentView: View {
                         onRelease: { gameScene.stopMoving() }
                     )
                 }
-                .foregroundColor(.white)
-                .padding()
             }
         }
     }
 }
 struct MoveButton: View {
     @State private var isPressed = false
+    
+    //allows to hold to walk
     @State private var timer: Timer? = nil
+    
     let action: () -> Void
     let onRelease: () -> Void
 
     var body: some View {
         Image(isPressed ? "B_Arrow_1" : "B_Arrow_0")
             .resizable()
-            .frame(width: 50, height: 50)
+            .frame(width: 80, height: 80)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
@@ -83,20 +92,21 @@ struct JumpButton: View {
     var body: some View {
         Image(isPressed ? "B_Jump_1" : "B_Jump_0")
             .resizable()
-            .frame(width: 100, height: 100)
+            .frame(width: 160, height: 160)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
                         if !isPressed {
                             isPressed = true
-                            action() // Call jump ONCE immediately when pressed
+                            // calls jump once when pressed
+                            action()
                         }
                     }
                     .onEnded { _ in
                         isPressed = false
                     }
             )
-            .offset(y:-10)
+            .offset(y:-16) //fixes it being slightly off center
     }
 }
 
