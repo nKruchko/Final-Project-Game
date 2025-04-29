@@ -141,6 +141,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             startIdleAnimation()
         }
     }
+
     
 }
 
