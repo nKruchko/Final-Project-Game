@@ -9,16 +9,17 @@ import SpriteKit
 import SwiftUI
 
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var test = SKSpriteNode()
     var player = SKSpriteNode()
     var theGround = SKSpriteNode()
     var lastPosition: CGPoint = .zero
     
+    var isOnGround: Bool = true
     
     var character: SKSpriteNode!
     var frameIndex = 0
-    var characterState = "idle" //stores states: idle, walk, jump
+    @Published var characterState: String = "idle" //stores states: idle, walk, jump
     
     
     //"idle_0", "idle_1", "idle_2", "idle_3"
@@ -36,19 +37,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let groundCategory: UInt32 = 1
     let objectCategory: UInt32 = 2
     
+    struct PhysicsCategory {
+        static let character: UInt32 = 0x1 << 0
+        static let ground: UInt32 = 0x1 << 1
+    }
+    
     override func sceneDidLoad() {
         self.physicsWorld.contactDelegate = self
         let ground = SKNode()
-        ground.physicsBody?.categoryBitMask = groundCategory
+        ground.physicsBody?.categoryBitMask = PhysicsCategory.ground
+        ground.physicsBody?.collisionBitMask = PhysicsCategory.character
         ground.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: 0, y: 0, width: size.width + 90, height: size.height))
         ground.physicsBody?.node?.name = "ground"
+        ground.physicsBody?.isDynamic = false
+        
         addChild(ground)
+        
+        
+        
+        
+        
+        
         
         theGround = SKSpriteNode(color: .orange, size: CGSize(width: 500, height: 20))
         theGround.position = CGPoint(x: size.width / 2, y: 100)
         theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
-        theGround.physicsBody?.categoryBitMask = groundCategory
-        theGround.physicsBody?.collisionBitMask = objectCategory
+        theGround.physicsBody?.categoryBitMask = PhysicsCategory.ground
+        theGround.physicsBody?.collisionBitMask = PhysicsCategory.character
         theGround.physicsBody?.node?.name = "theGround"
         theGround.physicsBody?.affectedByGravity = false
         theGround.physicsBody?.isDynamic = false
@@ -69,10 +84,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         character.position = CGPoint(x: size.width / 2,y: size.height / 2)
         
         
-        character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 50, height: 50))
-        character.physicsBody?.collisionBitMask = groundCategory
-        character.physicsBody?.contactTestBitMask = groundCategory
-        character.physicsBody?.categoryBitMask = objectCategory
+        character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
+        character.physicsBody?.collisionBitMask = PhysicsCategory.ground
+        character.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+        character.physicsBody?.categoryBitMask = PhysicsCategory.character
+        character.physicsBody?.allowsRotation = false
+        character.physicsBody?.affectedByGravity = true
+        character.physicsBody?.restitution = 0.0
         
         addChild(character)
         
@@ -82,12 +100,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         lastPosition = character.position
     }
-
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let bodies = [contact.bodyA, contact.bodyB]
+        if bodies.contains(where: { $0.categoryBitMask == PhysicsCategory.character}) && bodies.contains(where: { $0.categoryBitMask == PhysicsCategory.ground}) {
+            
+            isOnGround = true
+            characterState = "idle"
+            startIdleAnimation()
+        }
+    }
+    
     func startIdleAnimation(){
         characterState = "idle"
         character.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.5)),withKey: "idle")
     }
-
+    
     func moveLeft() {
         if characterState != "walk" {
             characterState = "walk"
@@ -96,7 +124,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             character.run(SKAction.repeatForever(SKAction.animate(with: walkFrames, timePerFrame: 0.2)), withKey: "walk")
         }
         character.run(SKAction.moveBy(x: -8, y: 0, duration: 0.1))
-    }    
+    }
     func moveRight() {
         if characterState != "walk" {
             characterState = "walk"
@@ -106,45 +134,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         character.run(SKAction.moveBy(x: 8, y: 0, duration: 0.1))
     }
-
-
-    func jump(){
-        characterState = "jump"
-        character.removeAllActions()
-        character.run(SKAction.repeatForever(SKAction.animate(with: jumpFrames, timePerFrame: 0.1)))
-        let jumpUp = SKAction.moveBy(x: 0, y: 64, duration: 0.2)
-        let jumpDown = SKAction.moveBy(x: 0, y: -64, duration: 0.2)
-        let sequence = SKAction.sequence([jumpUp,jumpDown])
-        character.run(sequence)
-        
-        //return to idle
-        run(SKAction.wait(forDuration: 0.5)){
-            self.startIdleAnimation()
-        }
-    }
-
-    func use() {
-        print("Use Button Pressed")
-    }
-    override func update(_ currentTime: TimeInterval) {
-        if(character.position != lastPosition) {
-            print("Character X Position: \(Int(character.position.x))")
-            lastPosition = character.position
-            print("Frame: \(frame)")
-        }
-    }
-
-    func stopMoving() {
-        if characterState != "idle" {
-            characterState = "idle"
-            character.removeAllActions()
-            startIdleAnimation()
-        }
-    }
-
     
-}
-
-#Preview {
-    ContentView()
-}
+    
+    func jump(){
+        guard isOnGround else {return}
+        characterState = "jump"
+        character.run(SKAction.animate(with: jumpFrames, timePerFrame: 0.1))
+        character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 50))
+        isOnGround = false
+    }
+        
+        
+        
+        //        character.removeAllActions()
+        //        character.run(SKAction.repeatForever(SKAction.animate(with: jumpFrames, timePerFrame: 0.1)))
+        //        let jumpUp = SKAction.moveBy(x: 0, y: 64, duration: 0.2)
+        //        let jumpDown = SKAction.moveBy(x: 0, y: -64, duration: 0.2)
+        //        let pause = SKAction.wait(forDuration: 0.5)
+        //
+        //        let sequence = SKAction.sequence([jumpUp, pause, jumpDown])
+        //        character.run(sequence)
+        //
+        //        //return to idle
+        //        run(SKAction.wait(forDuration: 0.5)){
+        //            self.startIdleAnimation()
+        //        }
+        //    }
+                
+        
+        func use() {
+            print("Use Button Pressed")
+        }
+        
+        func stopMoving() {
+            if characterState != "idle" {
+                characterState = "idle"
+                character.removeAllActions()
+                startIdleAnimation()
+            }
+        }
+        
+        
+    }
+    
+    #Preview {
+        ContentView()
+    }
