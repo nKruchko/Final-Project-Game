@@ -29,7 +29,10 @@ struct ContentView: View {
             
             //stack of controls and buttons
             ZStack {
-                Color.gray
+                Image("Button_Backround")
+                    .resizable()
+                    .frame(width: 400,height: 200)
+                    .offset(y:10)
                 .ignoresSafeArea()
                 
                 //left, jump, right buttons
@@ -77,6 +80,7 @@ struct MoveButton: View {
         Image(isPressed ? "B_Arrow_1" : "B_Arrow_0")
             .resizable()
             .frame(width: 80, height: 80)
+            .offset(x:-22)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
@@ -104,6 +108,7 @@ struct JumpButton: View {
         Image(isPressed ? "B_Jump_1" : "B_Jump_0")
             .resizable()
             .frame(width: 120, height: 120)
+            .offset(x:10)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
@@ -130,6 +135,7 @@ struct UseButton: View {
         Image(isPressed ? "B_Use_0" : "B_Use_1")
             .resizable()
             .frame(width: 120, height: 120)
+            .offset(x:-10)
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
