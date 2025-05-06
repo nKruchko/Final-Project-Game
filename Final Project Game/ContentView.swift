@@ -166,6 +166,7 @@ struct UseButton: View {
 }
 struct volumeButton: View{
     @Binding var level: Int
+    let onChange: (Int) -> Void
     let volumeNodes = ["Menu_0","Menu_1","Menu_2"]
     
     var body: some View{
@@ -200,8 +201,16 @@ struct gameMenuView: View{
                 .ignoresSafeArea()
                 .onTapGesture {
                     showMenu = false }
+            VStack{
+                volumeButton(level: $soundVolume) { newLevel in
+                    
                 }
+                volumeButton(level: $musicVolume) {
+                    newLevel in
+                }
+            }
         }
+        
     }
 }
 
