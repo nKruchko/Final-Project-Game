@@ -10,10 +10,14 @@ import SpriteKit
 
 struct ContentView: View {
     //game screen
+<<<<<<< HEAD
     @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
     @State private var musicVolume = 2 //0:off, 1:50%, 2:100%
     @State private var effectsVollume = 2
     @State private var showMenu = false
+=======
+    @StateObject var gameScene = GameScene(size: CGSize(width: 300, height: 600))
+>>>>>>> main
     
     //screen elements
     var body: some View {
