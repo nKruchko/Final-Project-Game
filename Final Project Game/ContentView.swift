@@ -10,13 +10,10 @@ import SpriteKit
 
 struct ContentView: View {
     //game screen
-<<<<<<< HEAD
     @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
     @State private var musicVolume = 2 //0:off, 1:50%, 2:100%
     @State private var effectsVollume = 2
     @State private var showMenu = false
-=======
-    @StateObject var gameScene = GameScene(size: CGSize(width: 300, height: 600))
     
     //screen elements
     var body: some View {
@@ -191,7 +188,21 @@ struct volumeButton: View{
         }
         
     }
+}
+struct gameMenuView: View{
+    @Binding var showMenu: Bool
+    @Binding var musicVolume: Int
+    @Binding var soundVolume: Int
     
+    var body: some View{
+        ZStack{
+            Color.black.opacity(0.6)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    showMenu = false }
+                }
+        }
+    }
 }
 
 
