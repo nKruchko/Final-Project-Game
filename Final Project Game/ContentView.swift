@@ -212,7 +212,7 @@ struct gameMenuView: View{
         }
         
     }
-}
+
 
 
 
