@@ -139,28 +139,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     func jump(){
         guard isOnGround else {return}
         characterState = "jump"
-        character.run(SKAction.animate(with: jumpFrames, timePerFrame: 0.1))
+        character.run(SKAction.animate(with: jumpFrames, timePerFrame: 0.5))
         character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 50))
         isOnGround = false
     }
         
-        
-        
-        //        character.removeAllActions()
-        //        character.run(SKAction.repeatForever(SKAction.animate(with: jumpFrames, timePerFrame: 0.1)))
-        //        let jumpUp = SKAction.moveBy(x: 0, y: 64, duration: 0.2)
-        //        let jumpDown = SKAction.moveBy(x: 0, y: -64, duration: 0.2)
-        //        let pause = SKAction.wait(forDuration: 0.5)
-        //
-        //        let sequence = SKAction.sequence([jumpUp, pause, jumpDown])
-        //        character.run(sequence)
-        //
-        //        //return to idle
-        //        run(SKAction.wait(forDuration: 0.5)){
-        //            self.startIdleAnimation()
-        //        }
-        //    }
-                
         
         func use() {
             print("Use Button Pressed")

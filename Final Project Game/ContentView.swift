@@ -33,38 +33,37 @@ struct ContentView: View {
                     .resizable()
                     .frame(width: 400,height: 200)
                     .offset(y:10)
-                .ignoresSafeArea()
-                
-                //left, jump, right buttons
-                HStack(spacing: 0) {
+                    .ignoresSafeArea()
+                    //left, jump, right buttons
+                    HStack(spacing: 0) {
                         Color.gray
-                        .ignoresSafeArea()
+                            .ignoresSafeArea()
                         MoveButton(
                             action: { gameScene.moveLeft() },
                             onRelease: { gameScene.stopMoving() })
                         .scaleEffect(x:-1)
                         
                         
-                    
-                    JumpButton {
-                        gameScene.jump()
-                    }                    
-                    UseButton{
-                        gameScene.use()
-                    }
-                    
+                        
+                        JumpButton {
+                            gameScene.jump()
+                        }
+                        UseButton{
+                            gameScene.use()
+                        }
                         
                         
-                    MoveButton(
-                        action: { gameScene.moveRight() },
-                        onRelease: { gameScene.stopMoving() }
-                    )
-                }//end hstack
-                .frame(width: 100, height: 100)
-                
-            }//end zstack
-            .frame(width: 500, height: 150)
-        }
+                        
+                        MoveButton(
+                            action: { gameScene.moveRight() },
+                            onRelease: { gameScene.stopMoving() }
+                        )
+                    }//end hstack
+                    .frame(width: 100, height: 100)
+                    
+                }//end zstack
+                .frame(width: 500, height: 150)
+            }
     }
 }
 struct MoveButton: View {
