@@ -102,6 +102,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        let skView = SKView()
+        skView.preferredFramesPerSecond = 30 // caps to 30 FPS
+
         let bodies = [contact.bodyA, contact.bodyB]
         if bodies.contains(where: { $0.categoryBitMask == PhysicsCategory.character}) && bodies.contains(where: { $0.categoryBitMask == PhysicsCategory.ground}) {
             
