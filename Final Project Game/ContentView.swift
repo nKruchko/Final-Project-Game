@@ -11,6 +11,9 @@ import SpriteKit
 struct ContentView: View {
     //game screen
     @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
+    @State private var musicVolume = 2 //0:off, 1:50%, 2:100%
+    @State private var effectsVollume = 2
+    @State private var showMenu = false
     
     //screen elements
     var body: some View {
@@ -61,6 +64,16 @@ struct ContentView: View {
                     )
                 }//end hstack
                 .frame(width: 100, height: 100)
+                
+                Button(action: {
+                    showMenu.toggle()
+                }){
+                    Image("B_Menu")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .offset(x: 175, y: -60)
+                    
+                }
                 
             }//end zstack
             .frame(width: 500, height: 150)
@@ -151,6 +164,32 @@ struct UseButton: View {
             )
             .offset(y:-16)
     }
+}
+struct volumeButton: View{
+    @Binding var level: Int
+    let volumeNodes = ["Menu_0","Menu_1","Menu_2"]
+    
+    var body: some View{
+        ZStack{
+            HStack{
+                Spacer()
+                Spacer()
+                Spacer()
+            }
+            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 40)
+            
+            Image(volumeNodes[level])
+                .resizable()
+                .frame(width: 20,height: 20)
+                .offset(x: CGFloat(level - 1) * 20)
+                .animation(.easeInOut(duration: 0.2), value: level)
+                .onTapGesture {
+                    level = (level + 1) % 3
+                }
+        }
+        
+    }
+    
 }
 
 
