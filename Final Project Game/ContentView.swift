@@ -17,7 +17,6 @@ struct ContentView: View {
     @State private var showMenu = false
 =======
     @StateObject var gameScene = GameScene(size: CGSize(width: 300, height: 600))
->>>>>>> main
     
     //screen elements
     var body: some View {
@@ -40,12 +39,11 @@ struct ContentView: View {
                     .resizable()
                     .frame(width: 400,height: 200)
                     .offset(y:10)
-                .ignoresSafeArea()
-                
-                //left, jump, right buttons
-                HStack(spacing: 0) {
+                    .ignoresSafeArea()
+                    //left, jump, right buttons
+                    HStack(spacing: 0) {
                         Color.gray
-                        .ignoresSafeArea()
+                            .ignoresSafeArea()
                         MoveButton(
                             action: { gameScene.moveLeft() },
                             onRelease: { gameScene.stopMoving() })
