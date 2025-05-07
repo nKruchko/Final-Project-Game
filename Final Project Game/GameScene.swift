@@ -59,7 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         
         
-        theGround = SKSpriteNode(color: .orange, size: CGSize(width: 500, height: 20))
+        theGround = SKSpriteNode(color: .orange, size: CGSize(width: 600, height: 20))
         theGround.position = CGPoint(x: size.width / 2, y: 100)
         theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
         theGround.physicsBody?.categoryBitMask = PhysicsCategory.ground
