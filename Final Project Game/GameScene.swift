@@ -34,8 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var jumpStrings = ["Farmer_Jump_Frame"]
     var jumpFrames: [SKTexture] { jumpStrings.map {SKTexture(imageNamed: $0) } }
     
-    var growStrings = ["Plant_Grow_Sun_0","Plant_Grow_Sun_1","Plant_Grow_Sun_2","Plant_Grow_Sun_4"]
-    var grwoFrames: [SKTexture] {growStrings.map{SKTexture(imageNamed: $0)}}
+    var growStrings = ["Plant_Grow_Sun_0","Plant_Grow_Sun_1","Plant_Grow_Sun_2","Plant_Grow_Sun_3"]
+    var growFrames: [SKTexture] {growStrings.map{SKTexture(imageNamed: $0)}}
     
     
     let groundCategory: UInt32 = 1
@@ -44,6 +44,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     struct PhysicsCategory {
         static let character: UInt32 = 0x1 << 0
         static let ground: UInt32 = 0x1 << 1
+        static let plant: UInt32 = 0x1 << 3
+
     }
     
     override func sceneDidLoad() {
@@ -155,7 +157,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         func use() {
             print("Use Button Pressed")
+            plant = SKSpriteNode(texture: growFrames[0])
+            plant.size = CGSize(width: 50, height: 50)
+            plant.position = character.position
             
+            plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
+            plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
+            plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+            plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
+            plant.physicsBody?.allowsRotation = false
+            plant.physicsBody?.affectedByGravity = true
+            plant.physicsBody?.restitution = 0.0
+            plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
+            addChild(plant)
         }
         
         func stopMoving() {
