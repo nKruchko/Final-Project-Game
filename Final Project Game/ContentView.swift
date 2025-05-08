@@ -82,10 +82,11 @@ struct ContentView: View {
                 gameMenuView(
                     showMenu: $showMenu, musicVolume: $musicVolume, soundVolume: $effectsVolume, onClose: {showMenu = false})
                 .frame(width: 400, height: 600)
-                .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                .shadow(radius: 10)
                 .transition(.scale)
                 .zIndex(1)
-                
+                .modifier(SwayingEffect())
+                .background(StaticBackgroundView())
             }
         }//end zstack
         
@@ -242,6 +243,44 @@ struct gameMenuView: View{
                     .scaleEffect(0.5)
             }
         }
+    }
+}
+struct SwayingEffect: ViewModifier {
+    @State private var sway = false
+    
+    func body(content: Content) -> some View {
+        content
+        //ai used for effect syntax up to ->
+            .rotationEffect(.degrees(sway ? 1 : -1), anchor: .center)
+            .offset(x: sway ? 1.5 : -1.5, y: sway ? 1 : -1)
+            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true), value: sway)
+            .onAppear {
+                sway = true
+            }
+    }
+}//here<-
+struct StaticBackgroundView: View {
+    @State private var noiseOffset = CGSize.zero
+    
+    var body: some View {
+        GeometryReader { geometry in
+            Image("Static")                .resizable()
+                .scaledToFill()
+                .frame(width: geometry.size.width*3, height: geometry.size.height*3)
+                .opacity(0.7)
+                //ai use up to ->
+                .offset(noiseOffset)
+                .onAppear {
+                    withAnimation(Animation.linear(duration: 5.5).repeatForever(autoreverses: true)) {
+                        noiseOffset = CGSize(width: .random(in: -400...400), height: .random(in: -400...400))
+                    }
+                }
+                
+                .offset(y:-300)
+        }
+        .allowsHitTesting(false)
+        .ignoresSafeArea()
+        //here <-
     }
 }
 
