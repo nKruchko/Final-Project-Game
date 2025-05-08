@@ -12,31 +12,33 @@ struct ContentView: View {
     //game screen
     @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
     @State private var musicVolume = 2 //0:off, 1:50%, 2:100%
-    @State private var effectsVollume = 2
+    @State private var effectsVolume = 2
     @State private var showMenu = false
     
     //screen elements
     var body: some View {
-        VStack{
-            //game scene renderer
-            GeometryReader(content: {
-                geometry in
-                SpriteView(scene: gameScene)
-                    .onAppear {
-                        gameScene.size = geometry.size
-                        gameScene.scaleMode = .resizeFill
-                    }
-                    .background(Color.black)
-                    .ignoresSafeArea()
-            })
-            
-            //stack of controls and buttons
-            ZStack {
-                Image("Button_Backround")
-                    .resizable()
-                    .frame(width: 400,height: 200)
-                    .offset(y:10)
-                    .ignoresSafeArea()
+        
+        ZStack{
+            VStack{
+                //game scene renderer
+                GeometryReader(content: {
+                    geometry in
+                    SpriteView(scene: gameScene)
+                        .onAppear {
+                            gameScene.size = geometry.size
+                            gameScene.scaleMode = .resizeFill
+                        }
+                        .background(Color.black)
+                        .ignoresSafeArea()
+                })
+                
+                //stack of controls and buttons
+                ZStack {
+                    Image("Button_Backround")
+                        .resizable()
+                        .frame(width: 400,height: 200)
+                        .offset(y:10)
+                        .ignoresSafeArea()
                     //left, jump, right buttons
                     HStack(spacing: 0) {
                         Color.gray
@@ -47,36 +49,46 @@ struct ContentView: View {
                         .scaleEffect(x:-1)
                         
                         
+                        
+                        JumpButton {
+                            gameScene.jump()
+                        }
+                        UseButton{
+                            gameScene.use()
+                        }
+                        
+                        
+                        
+                        MoveButton(
+                            action: { gameScene.moveRight() },
+                            onRelease: { gameScene.stopMoving() }
+                        )
+                    }//end hstack
+                    .frame(width: 100, height: 100)
                     
-                    JumpButton {
-                        gameScene.jump()
-                    }                    
-                    UseButton{
-                        gameScene.use()
+                    Button(action: {
+                        showMenu = true
+                    }){
+                        Image("B_Menu")
+                            .resizable()
+                            .frame(width: 50, height: 50)
                     }
+                    .offset(x: 175, y: -60)
                     
-                        
-                        
-                    MoveButton(
-                        action: { gameScene.moveRight() },
-                        onRelease: { gameScene.stopMoving() }
-                    )
-                }//end hstack
-                .frame(width: 100, height: 100)
+                }//end zstack
+                .frame(width: 500, height: 150)
+            }//end vstack
+            if showMenu{
+                gameMenuView(
+                    showMenu: $showMenu, musicVolume: $musicVolume, soundVolume: $effectsVolume, onClose: {showMenu = false})
+                .frame(width: 400, height: 600)
+                .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                .transition(.scale)
+                .zIndex(1)
                 
-                Button(action: {
-                    showMenu.toggle()
-                }){
-                    Image("B_Menu")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .offset(x: 175, y: -60)
-                    
-                }
-                
-            }//end zstack
-            .frame(width: 500, height: 150)
-        }
+            }
+        }//end zstack
+        
     }
 }
 struct MoveButton: View {
@@ -166,6 +178,7 @@ struct UseButton: View {
 }
 struct volumeButton: View{
     @Binding var level: Int
+    let onChange: (Int) -> Void
     let volumeNodes = ["Menu_0","Menu_1","Menu_2"]
     
     var body: some View{
@@ -189,21 +202,48 @@ struct volumeButton: View{
         
     }
 }
+struct closeMenuButton: View{
+    @Binding var showMenu: Bool
+    var body: some View{
+        Image("Menu_Close")
+            .onTapGesture {
+                showMenu = false
+            }
+    }
+}
 struct gameMenuView: View{
     @Binding var showMenu: Bool
     @Binding var musicVolume: Int
     @Binding var soundVolume: Int
+    let onClose: () -> Void
     
     var body: some View{
         ZStack{
             Color.black.opacity(0.6)
                 .ignoresSafeArea()
+                .frame(width: 800, height: 2000)
                 .onTapGesture {
                     showMenu = false }
+            Image("Menu_Background")
+                .resizable()
+                .frame(width: 300, height: 450)
+            VStack{
+                volumeButton(level: $soundVolume) { newLevel in
                 }
+                .scaleEffect(1.20)
+                .offset(x:60,y:14)
+                volumeButton(level: $musicVolume) {
+                    newLevel in
+                }
+                .scaleEffect(1.2)
+                .offset(x:60,y:22)
+                closeMenuButton(showMenu: $showMenu)
+                    .offset(y:125)
+                    .scaleEffect(0.5)
+            }
         }
     }
-
+}
 
 
 
