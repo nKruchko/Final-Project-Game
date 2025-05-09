@@ -13,14 +13,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var test = SKSpriteNode()
     var player = SKSpriteNode()
     var theGround = SKSpriteNode()
+    var plant = SKSpriteNode()
     var lastPosition: CGPoint = .zero
-    
     var isOnGround: Bool = true
     
     var character: SKSpriteNode!
     var frameIndex = 0
     @Published var characterState: String = "idle" //stores states: idle, walk, jump
-    
+    //grass color
+    let darkGrassGreen = SKColor(red: 0.1, green: 0.75, blue: 0.1, alpha: 1.0)
+
     
     //"idle_0", "idle_1", "idle_2", "idle_3"
     var idleStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
@@ -32,6 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var jumpStrings = ["Farmer_Jump_Frame"]
     var jumpFrames: [SKTexture] { jumpStrings.map {SKTexture(imageNamed: $0) } }
     
+    var growStrings = ["Plant_Grow_Sun_0","Plant_Grow_Sun_1","Plant_Grow_Sun_2","Plant_Grow_Sun_3"]
+    var growFrames: [SKTexture] {growStrings.map{SKTexture(imageNamed: $0)}}
     
     
     let groundCategory: UInt32 = 1
@@ -40,6 +44,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     struct PhysicsCategory {
         static let character: UInt32 = 0x1 << 0
         static let ground: UInt32 = 0x1 << 1
+        static let plant: UInt32 = 0x1 << 3
+
     }
     
     override func sceneDidLoad() {
@@ -59,7 +65,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         
         
-        theGround = SKSpriteNode(color: .orange, size: CGSize(width: 600, height: 20))
+
+        theGround = SKSpriteNode(color: darkGrassGreen, size: CGSize(width: 500, height: 20))
         theGround.position = CGPoint(x: size.width / 2, y: 100)
         theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
         theGround.physicsBody?.categoryBitMask = PhysicsCategory.ground
@@ -150,6 +157,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         func use() {
             print("Use Button Pressed")
+            plant = SKSpriteNode(texture: growFrames[0])
+            plant.size = CGSize(width: 50, height: 50)
+            plant.position = character.position
+            
+            plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
+            plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
+            plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+            plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
+            plant.physicsBody?.allowsRotation = false
+            plant.physicsBody?.affectedByGravity = true
+            plant.physicsBody?.restitution = 0.0
+            plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
+            addChild(plant)
         }
         
         func stopMoving() {
