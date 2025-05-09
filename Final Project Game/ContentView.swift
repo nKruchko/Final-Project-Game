@@ -87,6 +87,7 @@ struct ContentView: View {
                 .zIndex(1)
                 .modifier(SwayingEffect())
                 .background(StaticBackgroundView())
+                .offset(y:-50)
             }
         }//end zstack
         
@@ -193,7 +194,7 @@ struct volumeButton: View{
             
             Image(volumeNodes[level])
                 .resizable()
-                .frame(width: 20,height: 20)
+                .frame(width: 60,height: 20)
                 .offset(x: CGFloat(level - 1) * 20)
                 .animation(.easeInOut(duration: 0.2), value: level)
                 .onTapGesture {
@@ -271,8 +272,8 @@ struct StaticBackgroundView: View {
                 //ai use up to ->
                 .offset(noiseOffset)
                 .onAppear {
-                    withAnimation(Animation.linear(duration: 5.5).repeatForever(autoreverses: true)) {
-                        noiseOffset = CGSize(width: .random(in: -400...400), height: .random(in: -400...400))
+                    withAnimation(Animation.linear(duration: 4).repeatForever(autoreverses: true)) {
+                        noiseOffset = CGSize(width: .random(in: -300...300), height: .random(in: -300...300))
                     }
                 }
                 
