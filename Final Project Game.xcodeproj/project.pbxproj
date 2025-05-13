@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		918C85032DD3ACBB00106AFF /* spring.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 918C85022DD3ACBB00106AFF /* spring.mp3 */; };
+		918C85052DD3AE4400106AFF /* menuswoosh.wav in Resources */ = {isa = PBXBuildFile; fileRef = 918C85042DD3AE4400106AFF /* menuswoosh.wav */; };
 		91A94F5D2DB16789004410D5 /* Final_Project_GameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A94F5C2DB16789004410D5 /* Final_Project_GameApp.swift */; };
 		91A94F5F2DB16789004410D5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A94F5E2DB16789004410D5 /* ContentView.swift */; };
 		91A94F612DB1678D004410D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91A94F602DB1678D004410D5 /* Assets.xcassets */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		918C85022DD3ACBB00106AFF /* spring.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = spring.mp3; sourceTree = "<group>"; };
+		918C85042DD3AE4400106AFF /* menuswoosh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = menuswoosh.wav; sourceTree = "<group>"; };
 		91A94F592DB16789004410D5 /* Final Project Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Final Project Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91A94F5C2DB16789004410D5 /* Final_Project_GameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Final_Project_GameApp.swift; sourceTree = "<group>"; };
 		91A94F5E2DB16789004410D5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,7 +69,9 @@
 		91A94F622DB1678D004410D5 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				918C85022DD3ACBB00106AFF /* spring.mp3 */,
 				91A94F632DB1678D004410D5 /* Preview Assets.xcassets */,
+				918C85042DD3AE4400106AFF /* menuswoosh.wav */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -128,7 +134,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				918C85032DD3ACBB00106AFF /* spring.mp3 in Resources */,
 				91A94F642DB1678D004410D5 /* Preview Assets.xcassets in Resources */,
+				918C85052DD3AE4400106AFF /* menuswoosh.wav in Resources */,
 				91A94F612DB1678D004410D5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
