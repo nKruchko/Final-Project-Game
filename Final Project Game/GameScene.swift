@@ -16,6 +16,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var plant = SKSpriteNode()
     var lastPosition: CGPoint = .zero
     var isOnGround: Bool = true
+    var grassBlock = SKSpriteNode()
+    var xVal = 15
+    var yVal = 100
     
     var character: SKSpriteNode!
     var frameIndex = 0
@@ -59,8 +62,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         addChild(ground)
         
+        levelOne()
         
-        
+
         
         
         
@@ -82,7 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         
         
-        addChild(theGround)
+ //       addChild(theGround)
         
     }
     override func didMove(to view: SKView) {
@@ -106,6 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         print(character.position)
         
         lastPosition = character.position
+        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -185,7 +190,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                 startIdleAnimation()
             }
         }
+    func levelOne() {
+        while(xVal < 380) {
+            grassBlock = SKSpriteNode(imageNamed: "grass")
+            grassBlock.size = CGSize(width: 32, height: 32)
+            grassBlock.position = CGPoint(x: xVal, y: yVal)
+            grassBlock.physicsBody = SKPhysicsBody()
+            grassBlock.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 32, height: 32))
+            grassBlock.physicsBody?.affectedByGravity = false
+            grassBlock.physicsBody?.isDynamic = false
+            xVal += 32
+            addChild(grassBlock)
+        }
         
+    }
+    
         
     }
     
