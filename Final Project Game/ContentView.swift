@@ -15,6 +15,8 @@ struct ContentView: View {
     @State private var effectsVolume = 2
     @State private var showMenu = false
     
+    let menuSound = SKAction.playSoundFileNamed("menuswoosh", waitForCompletion: false)
+    
     //screen elements
     var body: some View {
         
@@ -31,6 +33,7 @@ struct ContentView: View {
                         .background(Color.black)
                         .ignoresSafeArea()
                 })
+                .offset(x:53)
                 
                 //stack of controls and buttons
                 ZStack {
@@ -78,7 +81,14 @@ struct ContentView: View {
                 }//end zstack
                 .frame(width: 500, height: 150)
             }//end vstack
+            .onChange(of: showMenu) {newValue in
+                if newValue {
+                    gameScene.run(menuSound)
+                }
+            }
+            
             if showMenu{
+                
                 gameMenuView(
                     showMenu: $showMenu, musicVolume: $musicVolume, soundVolume: $effectsVolume, onClose: {showMenu = false})
                 .frame(width: 400, height: 600)

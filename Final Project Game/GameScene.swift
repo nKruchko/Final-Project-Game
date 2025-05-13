@@ -149,7 +149,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     func jump(){
         guard isOnGround else {return}
         characterState = "jump"
-        character.run(SKAction.animate(with: jumpFrames, timePerFrame: 0.5))
+        
+        let jumpSound = SKAction.playSoundFileNamed("spring", waitForCompletion: false)
+        
+        let jumpAnimation = SKAction.animate(with: jumpFrames, timePerFrame: 0.5)
+        
+        character.run(SKAction.group([jumpAnimation, jumpSound]))
+        
         character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 50))
         isOnGround = false
     }
