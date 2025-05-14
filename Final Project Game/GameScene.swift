@@ -19,6 +19,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var grassBlock = SKSpriteNode()
     var xVal = 15
     var yVal = 100
+    var rep = 0
+    var keysPressed: Set<UInt16> = []
     
     var character: SKSpriteNode!
     var frameIndex = 0
@@ -90,6 +92,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
     }
     override func didMove(to view: SKView) {
+      //  view.window?.makeFirstResponder(self)
+        
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
         character.position = CGPoint(x: size.width / 2,y: size.height / 2)
@@ -191,7 +195,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             }
         }
     func levelOne() {
-        while(xVal < 380) {
+        while(rep < 13) {
             grassBlock = SKSpriteNode(imageNamed: "grass")
             grassBlock.size = CGSize(width: 32, height: 32)
             grassBlock.position = CGPoint(x: xVal, y: yVal)
@@ -199,7 +203,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             grassBlock.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 32, height: 32))
             grassBlock.physicsBody?.affectedByGravity = false
             grassBlock.physicsBody?.isDynamic = false
+            grassBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
+            grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
             xVal += 32
+            rep+=1
+            if(rep == 2) {
+                yVal -= 32
+            }
+            if(rep == 6) {
+                yVal += 32
+            }
             addChild(grassBlock)
         }
         
