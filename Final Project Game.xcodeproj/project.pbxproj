@@ -14,6 +14,8 @@
 		91A94F612DB1678D004410D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91A94F602DB1678D004410D5 /* Assets.xcassets */; };
 		91A94F642DB1678D004410D5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91A94F632DB1678D004410D5 /* Preview Assets.xcassets */; };
 		CB591BE42DB169AD005501DC /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB591BE32DB169AD005501DC /* GameScene.swift */; };
+		CBF61A322DD507D5002A183D /* clickOut.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBF61A302DD507D5002A183D /* clickOut.mp3 */; };
+		CBF61A332DD507D5002A183D /* clickIn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBF61A312DD507D5002A183D /* clickIn.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,8 @@
 		91A94F602DB1678D004410D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91A94F632DB1678D004410D5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CB591BE32DB169AD005501DC /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		CBF61A302DD507D5002A183D /* clickOut.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = clickOut.mp3; path = ../../../../Downloads/clickOut.mp3; sourceTree = "<group>"; };
+		CBF61A312DD507D5002A183D /* clickIn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = clickIn.mp3; path = ../../../../Downloads/clickIn.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +73,8 @@
 		91A94F622DB1678D004410D5 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				CBF61A312DD507D5002A183D /* clickIn.mp3 */,
+				CBF61A302DD507D5002A183D /* clickOut.mp3 */,
 				918C85022DD3ACBB00106AFF /* spring.mp3 */,
 				91A94F632DB1678D004410D5 /* Preview Assets.xcassets */,
 				918C85042DD3AE4400106AFF /* menuswoosh.wav */,
@@ -134,7 +140,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBF61A322DD507D5002A183D /* clickOut.mp3 in Resources */,
 				918C85032DD3ACBB00106AFF /* spring.mp3 in Resources */,
+				CBF61A332DD507D5002A183D /* clickIn.mp3 in Resources */,
 				91A94F642DB1678D004410D5 /* Preview Assets.xcassets in Resources */,
 				918C85052DD3AE4400106AFF /* menuswoosh.wav in Resources */,
 				91A94F612DB1678D004410D5 /* Assets.xcassets in Resources */,

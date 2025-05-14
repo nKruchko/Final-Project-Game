@@ -8,14 +8,15 @@
 import SwiftUI
 import SpriteKit
 
+let clickIn = SKAction.playSoundFileNamed("clickIn", waitForCompletion: false)
+let clickOut = SKAction.playSoundFileNamed("clickOut", waitForCompletion: false)
 struct ContentView: View {
     //game screen
     @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
     @State private var musicVolume = 2 //0:off, 1:50%, 2:100%
     @State private var effectsVolume = 2
     @State private var showMenu = false
-    
-    let menuSound = SKAction.playSoundFileNamed("menuswoosh", waitForCompletion: false)
+
     
     //screen elements
     var body: some View {
@@ -47,29 +48,37 @@ struct ContentView: View {
                         Color.gray
                             .ignoresSafeArea()
                         MoveButton(
-                            action: { gameScene.moveLeft() },
+                            gameScene: gameScene, action: { gameScene.moveLeft()
+                            },
                             onRelease: { gameScene.stopMoving() })
                         .scaleEffect(x:-1)
                         
                         
                         
-                        JumpButton {
-                            gameScene.jump()
-                        }
-                        UseButton{
-                            gameScene.use()
-                        }
-                        
+                        JumpButton(
+                            gameScene: gameScene,
+                            action: {
+                                gameScene.jump()
+                            }
+                        )
+                        UseButton(
+                            gameScene: gameScene,
+                            action: {
+                                gameScene.use()
+                            }
+                        )
+
                         
                         
                         MoveButton(
-                            action: { gameScene.moveRight() },
+                            gameScene: gameScene, action: { gameScene.moveRight() },
                             onRelease: { gameScene.stopMoving() }
                         )
                     }//end hstack
                     .frame(width: 100, height: 100)
                     
                     Button(action: {
+                        gameScene.run(clickIn)
                         showMenu = true
                     }){
                         Image("B_Menu")
@@ -81,16 +90,16 @@ struct ContentView: View {
                 }//end zstack
                 .frame(width: 500, height: 150)
             }//end vstack
-            .onChange(of: showMenu) {newValue in
-                if newValue {
-                    gameScene.run(menuSound)
-                }
-            }
             
             if showMenu{
                 
                 gameMenuView(
-                    showMenu: $showMenu, musicVolume: $musicVolume, soundVolume: $effectsVolume, onClose: {showMenu = false})
+                    gameScene: gameScene,
+                    showMenu: $showMenu,
+                    musicVolume: $musicVolume,
+                    soundVolume: $effectsVolume,
+                    onClose: { showMenu = false }
+                )
                 .frame(width: 400, height: 600)
                 .shadow(radius: 10)
                 .transition(.scale)
@@ -104,6 +113,7 @@ struct ContentView: View {
     }
 }
 struct MoveButton: View {
+    let gameScene: GameScene
     @State private var isPressed = false
     
     //allows to hold to walk
@@ -122,6 +132,7 @@ struct MoveButton: View {
                     .onChanged { _ in
                         if !isPressed {
                             isPressed = true
+                            gameScene.run(clickIn)
                             timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
                                 action()
                             }
@@ -131,12 +142,14 @@ struct MoveButton: View {
                         isPressed = false
                         timer?.invalidate()
                         timer = nil
+                        gameScene.run(clickOut)
                         onRelease()
                     }
             )
     }
 }
 struct JumpButton: View {
+    let gameScene: GameScene
     @State private var isPressed = false
     let action: () -> Void
 
@@ -150,12 +163,18 @@ struct JumpButton: View {
                     .onChanged { _ in
                         if !isPressed {
                             isPressed = true
+                            gameScene.run(clickIn)
+                            action()
+                        }
+if !isPressed {
+                            isPressed = true
                             // calls jump once when pressed
                             action()
                         }
                     }
                     .onEnded { _ in
                         isPressed = false
+                        gameScene.run(clickOut)
                     }
             )
             .offset(y:-16) //fixes it being slightly off center
@@ -164,6 +183,7 @@ struct JumpButton: View {
 }
 
 struct UseButton: View {
+    let gameScene: GameScene
     @State private var isPressed = false
     let action: () -> Void
 
@@ -177,12 +197,13 @@ struct UseButton: View {
                     .onChanged { _ in
                         if !isPressed {
                             isPressed = true
-                            // calls use once when pressed
+                            gameScene.run(clickIn)
                             action()
                         }
                     }
                     .onEnded { _ in
                         isPressed = false
+                        gameScene.run(clickOut)
                     }
             )
             .offset(y:-16)
@@ -215,19 +236,23 @@ struct volumeButton: View{
     }
 }
 struct closeMenuButton: View{
+    let gameScene: GameScene
     @Binding var showMenu: Bool
     var body: some View{
         Image("Menu_Close")
             .onTapGesture {
+                gameScene.run(clickOut)
                 showMenu = false
             }
     }
 }
 struct gameMenuView: View{
+    let gameScene: GameScene
     @Binding var showMenu: Bool
     @Binding var musicVolume: Int
     @Binding var soundVolume: Int
     let onClose: () -> Void
+
     
     var body: some View{
         ZStack{
@@ -235,7 +260,9 @@ struct gameMenuView: View{
                 .ignoresSafeArea()
                 .frame(width: 800, height: 2000)
                 .onTapGesture {
-                    showMenu = false }
+                    gameScene.run(clickOut)
+                    showMenu = false
+                }
             Image("Menu_Background")
                 .resizable()
                 .frame(width: 300, height: 450)
@@ -249,7 +276,7 @@ struct gameMenuView: View{
                 }
                 .scaleEffect(1.2)
                 .offset(x:60,y:22)
-                closeMenuButton(showMenu: $showMenu)
+                closeMenuButton(gameScene: gameScene, showMenu: $showMenu)
                     .offset(y:125)
                     .scaleEffect(0.5)
             }
