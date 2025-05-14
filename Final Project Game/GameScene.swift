@@ -20,14 +20,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var xVal = 15
     var yVal = 100
     var rep = 0
-    var keysPressed: Set<UInt16> = []
     
     var character: SKSpriteNode!
     var frameIndex = 0
     @Published var characterState: String = "idle" //stores states: idle, walk, jump
     //grass color
     let darkGrassGreen = SKColor(red: 0.1, green: 0.75, blue: 0.1, alpha: 1.0)
-
+    
     
     //"idle_0", "idle_1", "idle_2", "idle_3"
     var idleStrings = ["Farmer_Idle_0", "Farmer_Idle_1"]
@@ -50,7 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         static let character: UInt32 = 0x1 << 0
         static let ground: UInt32 = 0x1 << 1
         static let plant: UInt32 = 0x1 << 3
-
+        
     }
     
     override func sceneDidLoad() {
@@ -66,12 +65,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         levelOne()
         
-
         
         
         
         
-
+        
+        
         theGround = SKSpriteNode(color: darkGrassGreen, size: CGSize(width: 500, height: 20))
         theGround.position = CGPoint(x: size.width / 2, y: 100)
         theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
@@ -88,11 +87,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         
         
- //       addChild(theGround)
+        //       addChild(theGround)
         
     }
     override func didMove(to view: SKView) {
-      //  view.window?.makeFirstResponder(self)
+        
         
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
@@ -116,11 +115,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         lastPosition = character.position
         
     }
-    
     func didBegin(_ contact: SKPhysicsContact) {
         let skView = SKView()
         skView.preferredFramesPerSecond = 30 // caps to 30 FPS
-
+        
         let bodies = [contact.bodyA, contact.bodyB]
         if bodies.contains(where: { $0.categoryBitMask == PhysicsCategory.character}) && bodies.contains(where: { $0.categoryBitMask == PhysicsCategory.ground}) {
             
@@ -136,6 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     func moveLeft() {
+        jump()
         if characterState != "walk" {
             characterState = "walk"
             character.xScale = -1 // flip left
@@ -145,6 +144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         character.run(SKAction.moveBy(x: -8, y: 0, duration: 0.1))
     }
     func moveRight() {
+        jump()
         if characterState != "walk" {
             characterState = "walk"
             character.xScale = 1 // flip right
@@ -159,7 +159,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         guard isOnGround else {return}
         characterState = "jump"
         
-        let jumpSound = SKAction.playSoundFileNamed("spring", waitForCompletion: false)
+        let jumpSound = SKAction.playSoundFileNamed("e", waitForCompletion: false)
         
         let jumpAnimation = SKAction.animate(with: jumpFrames, timePerFrame: 0.5)
         
@@ -168,32 +168,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 50))
         isOnGround = false
     }
+    
+    
+    func use() {
+        print("Use Button Pressed")
+        plant = SKSpriteNode(texture: growFrames[0])
+        plant.size = CGSize(width: 50, height: 50)
+        plant.position = character.position
         
-        
-        func use() {
-            print("Use Button Pressed")
-            plant = SKSpriteNode(texture: growFrames[0])
-            plant.size = CGSize(width: 50, height: 50)
-            plant.position = character.position
-            
-            plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
-            plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
-            plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
-            plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
-            plant.physicsBody?.allowsRotation = false
-            plant.physicsBody?.affectedByGravity = true
-            plant.physicsBody?.restitution = 0.0
-            plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
-            addChild(plant)
+        plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
+        plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
+        plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+        plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
+        plant.physicsBody?.allowsRotation = false
+        plant.physicsBody?.affectedByGravity = true
+        plant.physicsBody?.restitution = 0.0
+        plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
+        addChild(plant)
+    }
+    
+    func stopMoving() {
+        if characterState != "idle" {
+            characterState = "idle"
+            character.removeAllActions()
+            startIdleAnimation()
         }
-        
-        func stopMoving() {
-            if characterState != "idle" {
-                characterState = "idle"
-                character.removeAllActions()
-                startIdleAnimation()
-            }
-        }
+    }
     func levelOne() {
         while(rep < 13) {
             grassBlock = SKSpriteNode(imageNamed: "grass")
@@ -217,10 +217,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
         
     }
-    
-        
-    }
-    
+   
+
+}
     #Preview {
         ContentView()
     }
+    
