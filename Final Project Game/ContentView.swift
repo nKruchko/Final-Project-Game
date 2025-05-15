@@ -13,7 +13,7 @@ let clickOut = SKAction.playSoundFileNamed("clickOut", waitForCompletion: false)
 struct ContentView: View {
     //game screen
     @State private var gameScene = GameScene(size: CGSize(width: 300, height: 600))
-    @State private var musicVolume = 2 //0:off, 1:50%, 2:100%
+    @State private var  musicVolume = 2 //0:off, 1:50%, 2:100%
     @State private var effectsVolume = 2
     @State private var showMenu = false
 
@@ -166,7 +166,7 @@ struct JumpButton: View {
                             gameScene.run(clickIn)
                             action()
                         }
-if !isPressed {
+                        if !isPressed {
                             isPressed = true
                             // calls jump once when pressed
                             action()
