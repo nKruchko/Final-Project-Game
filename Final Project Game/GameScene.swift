@@ -21,6 +21,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var yVal = 100
     var rep = 0
     
+    let level1 = [
+        "             ",
+        "             ",
+        "          GGG",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "             ",
+
+                
+    ]
+    
     var character: SKSpriteNode!
     var frameIndex = 0
     @Published var characterState: String = "idle" //stores states: idle, walk, jump
@@ -63,7 +75,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         addChild(ground)
         
-        levelOne()
+        
         
         
         
@@ -98,7 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         character.position = CGPoint(x: size.width / 2,y: size.height / 2)
         
         
-        character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
+        character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 51))
         character.physicsBody?.collisionBitMask = PhysicsCategory.ground
         character.physicsBody?.contactTestBitMask = PhysicsCategory.ground
         character.physicsBody?.categoryBitMask = PhysicsCategory.character
@@ -107,6 +119,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         character.physicsBody?.restitution = 0.0
         
         addChild(character)
+        
+        levelOne()
+
         
         startIdleAnimation()
         print(frame)
@@ -194,30 +209,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             startIdleAnimation()
         }
     }
+//    func levelOne() {
+//        while(rep < 13) {
+//            grassBlock = SKSpriteNode(imageNamed: "grass")
+//            grassBlock.size = CGSize(width: 32, height: 32)
+//            grassBlock.position = CGPoint(x: xVal, y: yVal)
+//            grassBlock.physicsBody = SKPhysicsBody()
+//            grassBlock.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 32, height: 32))
+//            grassBlock.physicsBody?.affectedByGravity = false
+//            grassBlock.physicsBody?.isDynamic = false
+//            grassBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
+//            grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
+//            xVal += 32
+//            rep+=1
+//            if(rep == 4) {
+//                yVal += 64
+//            }
+//            if(rep == 7) {
+//                
+//            }
+//            addChild(grassBlock)
+//        }
+//        
+//    }
     func levelOne() {
-        while(rep < 13) {
-            grassBlock = SKSpriteNode(imageNamed: "grass")
-            grassBlock.size = CGSize(width: 32, height: 32)
-            grassBlock.position = CGPoint(x: xVal, y: yVal)
-            grassBlock.physicsBody = SKPhysicsBody()
-            grassBlock.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 32, height: 32))
-            grassBlock.physicsBody?.affectedByGravity = false
-            grassBlock.physicsBody?.isDynamic = false
-            grassBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
-            grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
-            xVal += 32
-            rep+=1
-            if(rep == 2) {
-                yVal -= 32
+        let tileSize = CGSize(width: 32, height: 32)
+
+        for (rowIndex, row) in level1.reversed().enumerated() {
+            for (colIndex, char) in row.enumerated() {
+                let x = CGFloat(colIndex) * tileSize.width
+                let y = CGFloat(rowIndex) * tileSize.height
+                let position = CGPoint(x: x, y: y)
+
+                switch char {
+                case "G":
+                    let grassBlock = SKSpriteNode(imageNamed: "grass")
+                    grassBlock.size = tileSize
+                    grassBlock.position = position
+                    grassBlock.physicsBody = SKPhysicsBody(rectangleOf: tileSize)
+                    grassBlock.physicsBody?.affectedByGravity = false
+                    grassBlock.physicsBody?.isDynamic = false
+                    grassBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
+                    grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
+                    addChild(grassBlock)
+
+                case "P":
+                    character.position = position
+
+                default:
+                    break
+                }
             }
-            if(rep == 6) {
-                yVal += 32
-            }
-            addChild(grassBlock)
         }
-        
     }
-   
+
 
 }
     #Preview {
