@@ -118,6 +118,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         character.physicsBody?.affectedByGravity = true
         character.physicsBody?.restitution = 0.0
         
+        let background = SKSpriteNode(imageNamed: "background")
+        background.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        background.size = size
+        background.zPosition = -100
+        background.alpha = 1.0
+        background.name = "background"
+        
+        addChild(background)
         addChild(character)
         
         levelOne()
@@ -209,29 +217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             startIdleAnimation()
         }
     }
-//    func levelOne() {
-//        while(rep < 13) {
-//            grassBlock = SKSpriteNode(imageNamed: "grass")
-//            grassBlock.size = CGSize(width: 32, height: 32)
-//            grassBlock.position = CGPoint(x: xVal, y: yVal)
-//            grassBlock.physicsBody = SKPhysicsBody()
-//            grassBlock.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 32, height: 32))
-//            grassBlock.physicsBody?.affectedByGravity = false
-//            grassBlock.physicsBody?.isDynamic = false
-//            grassBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
-//            grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
-//            xVal += 32
-//            rep+=1
-//            if(rep == 4) {
-//                yVal += 64
-//            }
-//            if(rep == 7) {
-//                
-//            }
-//            addChild(grassBlock)
-//        }
-//        
-//    }
+
     func levelOne() {
         let tileSize = CGSize(width: 32, height: 32)
 
@@ -252,7 +238,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     grassBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
                     grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
                     addChild(grassBlock)
-
+                    
+//                case "D":
+//                    let dirtBlock = SKSpriteNode(imageNamed: "dirt")
+//                    dirtBlock.size = tileSize
+//                    dirtBlock.position = position
+//                    dirtBlock.physicsBody = SKPhysicsBody(rectangleOf: tileSize)
+//                    dirtBlock.physicsBody?.affectedByGravity = false
+//                    dirtBlock.physicsBody?.isDynamic = false
+//                    dirtBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
+//                    dirtBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
+//                    addChild(dirtBlock)
+//
                 case "P":
                     character.position = position
 
