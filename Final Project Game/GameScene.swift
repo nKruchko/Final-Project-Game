@@ -14,6 +14,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var player = SKSpriteNode()
     var theGround = SKSpriteNode()
     var plant = SKSpriteNode()
+    var numOfSeeds = 0
     var lastPosition: CGPoint = .zero
     var isOnGround: Bool = true
     var grassBlock = SKSpriteNode()
@@ -105,6 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     override func didMove(to view: SKView) {
         
+        numOfSeeds = 3
         
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
@@ -239,19 +241,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     func use() {
         print("Use Button Pressed")
-        plant = SKSpriteNode(texture: growFrames[0])
-        plant.size = CGSize(width: 50, height: 50)
-        plant.position = character.position
+        if(numOfSeeds>0)
+        {
+            plant = SKSpriteNode(texture: growFrames[0])
+            plant.size = CGSize(width: 50, height: 50)
+            plant.position = character.position
+            
+            plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
+            plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
+            plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+            plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
+            plant.physicsBody?.allowsRotation = false
+            plant.physicsBody?.affectedByGravity = true
+            plant.physicsBody?.restitution = 0.0
+            plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
+            addChild(plant)
+            numOfSeeds -= 1
+            print("\(numOfSeeds)")
+        }
         
-        plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
-        plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
-        plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
-        plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
-        plant.physicsBody?.allowsRotation = false
-        plant.physicsBody?.affectedByGravity = true
-        plant.physicsBody?.restitution = 0.0
-        plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
-        addChild(plant)
     }
     
     func stopMoving() {
