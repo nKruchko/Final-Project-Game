@@ -28,7 +28,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         " P   GGG     ",
         "GGG          ",
         "             ",
-        "             ",
+        "LLLLLLLLLLLLL",
 
                 
     ]
@@ -61,6 +61,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         static let character: UInt32 = 0x1 << 0
         static let ground: UInt32 = 0x1 << 1
         static let plant: UInt32 = 0x1 << 3
+        static let lava: UInt32 = 0x1 << 4
         
     }
     
@@ -112,6 +113,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 51))
         character.physicsBody?.collisionBitMask = PhysicsCategory.ground
+        character.physicsBody?.contactTestBitMask = PhysicsCategory.lava
         character.physicsBody?.contactTestBitMask = PhysicsCategory.ground
         character.physicsBody?.categoryBitMask = PhysicsCategory.character
         character.physicsBody?.allowsRotation = false
@@ -139,6 +141,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
     }
     func didBegin(_ contact: SKPhysicsContact) {
+        let firstBody: SKPhysicsBody
+        let secondBody: SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        if firstBody.categoryBitMask == PhysicsCategory.character &&
+            secondBody.categoryBitMask == PhysicsCategory.lava {
+            characterDidTouchLava()
+        }
+        
         let skView = SKView()
         skView.preferredFramesPerSecond = 30 // caps to 30 FPS
         
@@ -150,6 +168,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             startIdleAnimation()
         }
     }
+    
+    func characterDidTouchLava() {
+        let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+        
+        let wait = SKAction.wait(forDuration: 1)
+        
+        character.run(fadeOut) {
+            self.levelOne()
+        }
+        
+        character.run(wait) {
+            self.resetGame()
+        }
+        
+    }
+    
+    func resetGame() {
+        let fadeIn = SKAction.fadeIn(withDuration: 0.5)
+        
+        if let scene = SKScene(fileNamed: "GameScene") {
+            scene.scaleMode = self.scaleMode
+            self.view?.presentScene(scene, transition: .fade(withDuration: 1.0))
+        }
+        character.run(fadeIn)
+    }
+    
     
     func startIdleAnimation(){
         characterState = "idle"
@@ -239,17 +283,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
                     addChild(grassBlock)
                     
-//                case "D":
-//                    let dirtBlock = SKSpriteNode(imageNamed: "dirt")
-//                    dirtBlock.size = tileSize
-//                    dirtBlock.position = position
-//                    dirtBlock.physicsBody = SKPhysicsBody(rectangleOf: tileSize)
-//                    dirtBlock.physicsBody?.affectedByGravity = false
-//                    dirtBlock.physicsBody?.isDynamic = false
-//                    dirtBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
-//                    dirtBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
-//                    addChild(dirtBlock)
-//
+                case "D":
+                    let dirtBlock = SKSpriteNode(imageNamed: "dirt")
+                    dirtBlock.size = tileSize
+                    dirtBlock.position = position
+                    dirtBlock.physicsBody = SKPhysicsBody(rectangleOf: tileSize)
+                    dirtBlock.physicsBody?.affectedByGravity = false
+                    dirtBlock.physicsBody?.isDynamic = false
+                    dirtBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
+                    dirtBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
+                    addChild(dirtBlock)
+
+                case "L":
+                    let lava = SKSpriteNode(imageNamed: "lava")
+                    lava.size = tileSize
+                    lava.position = position
+                    lava.physicsBody = SKPhysicsBody(rectangleOf: tileSize)
+                    lava.physicsBody?.affectedByGravity = false
+                    lava.physicsBody?.isDynamic = false
+                    lava.physicsBody?.categoryBitMask = PhysicsCategory.lava
+                    lava.physicsBody?.contactTestBitMask = PhysicsCategory.character
+                    lava.physicsBody?.collisionBitMask = 0
+                    addChild(lava)
+
+                    
                 case "P":
                     character.position = position
 
