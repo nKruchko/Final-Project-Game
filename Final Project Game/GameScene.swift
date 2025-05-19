@@ -15,6 +15,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var theGround = SKSpriteNode()
     var plant = SKSpriteNode()
     var numOfSeeds = 0
+    var SeedBad = SKSpriteNode()
+    var SeedText = SKLabelNode(text: "")
+
+
     var lastPosition: CGPoint = .zero
     var isOnGround: Bool = true
     var grassBlock = SKSpriteNode()
@@ -75,6 +79,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         ground.physicsBody?.node?.name = "ground"
         ground.physicsBody?.isDynamic = false
         
+        SeedText.position = CGPoint(x: (110) , y: (size.height - 15) )
+        SeedText.fontSize = 30
+        SeedText.text = "\(3)"
+        SeedText.fontName = "Courier-Bold"
+        
+        addChild(SeedText)
         addChild(ground)
         
         
@@ -107,6 +117,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     override func didMove(to view: SKView) {
         
         numOfSeeds = 3
+        SeedBad = SKSpriteNode(imageNamed: "Seed_Packet")
+        SeedBad.size = CGSize(width: 90, height: 90)
+        SeedBad.position = CGPoint(x: CGFloat(50) , y: (size.height - 55) )
+        addChild(SeedBad)
         
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
@@ -257,6 +271,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
             addChild(plant)
             numOfSeeds -= 1
+            
+            SeedText.text = "\(numOfSeeds)"
             print("\(numOfSeeds)")
         }
         
