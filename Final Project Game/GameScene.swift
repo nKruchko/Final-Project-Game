@@ -80,6 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         ground.physicsBody?.isDynamic = false
         
         SeedText.position = CGPoint(x: (110) , y: (size.height - 15) )
+        SeedText.zPosition = 999
         SeedText.fontSize = 30
         SeedText.text = "\(3)"
         SeedText.fontName = "Courier-Bold"
@@ -154,11 +155,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedBad = SKSpriteNode(imageNamed: "Seed_Packet")
         SeedBad.size = CGSize(width: 90, height: 90)
         SeedBad.position = CGPoint(x: CGFloat(50) , y: (size.height - 55) )
+        SeedBad.zPosition = 999
         addChild(SeedBad)
         
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
         character.position = CGPoint(x: size.width / 2,y: size.height / 2)
+        character.zPosition = 998
         
         
         character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 51))
