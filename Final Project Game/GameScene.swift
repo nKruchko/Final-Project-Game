@@ -114,8 +114,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         //       addChild(theGround)
         
     }
+    var cloudTextures: [SKTexture] = []
     override func didMove(to view: SKView) {
+       
         
+        cloudTextures = [
+            SKTexture(imageNamed: "Cloud_1"),
+            SKTexture(imageNamed: "Cloud_2"),
+            SKTexture(imageNamed: "Cloud_3")
+        ]
+        
+        let spawnCloud = SKAction.run{
+            let texture = self.cloudTextures.randomElement()!
+            let cloud = SKSpriteNode(texture: texture)
+            cloud.size.width = cloud.size.width/5
+            cloud.size.height = cloud.size.height/5
+            
+            let startX = -cloud.size.width
+            let maxY = CGFloat(500)
+            let randomY = self.size.height-CGFloat.random(in: 0...maxY)
+            
+            cloud.position = CGPoint(x: startX, y: randomY)
+            self.addChild(cloud)
+            let distance = self.size.width + cloud.size.width * 2
+            let speed = CGFloat.random(in: 20...50)
+            let duration = TimeInterval(distance / speed)
+            
+            let move = SKAction.moveBy(x: distance, y: 0, duration: duration)
+            let remove = SKAction.removeFromParent()
+            cloud.run(SKAction.sequence([move, remove]))
+        }
+        
+        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        let sequence = SKAction.sequence([spawnCloud, wait])
+        let repeatForever = SKAction.repeatForever(sequence)
+        run(repeatForever)
+
         numOfSeeds = 3
         SeedBad = SKSpriteNode(imageNamed: "Seed_Packet")
         SeedBad.size = CGSize(width: 90, height: 90)
