@@ -15,6 +15,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var theGround = SKSpriteNode()
     var plant = SKSpriteNode()
     var numOfSeeds = 0
+    var SeedBad = SKSpriteNode()
+    var SeedText = SKLabelNode(text: "")
+
+
     var lastPosition: CGPoint = .zero
     var isOnGround: Bool = true
     var grassBlock = SKSpriteNode()
@@ -140,16 +144,63 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         ground.physicsBody?.node?.name = "ground"
         ground.physicsBody?.isDynamic = false
         
+        SeedText.position = CGPoint(x: (110) , y: (size.height - 15) )
+        SeedText.zPosition = 999
+        SeedText.fontSize = 30
+        SeedText.text = "\(3)"
+        SeedText.fontName = "Courier-Bold"
+        
+        addChild(SeedText)
         addChild(ground)
         
     }
+    var cloudTextures: [SKTexture] = []
     override func didMove(to view: SKView) {
+       
         
+        cloudTextures = [
+            SKTexture(imageNamed: "Cloud_1"),
+            SKTexture(imageNamed: "Cloud_2"),
+            SKTexture(imageNamed: "Cloud_3")
+        ]
+        
+        let spawnCloud = SKAction.run{
+            let texture = self.cloudTextures.randomElement()!
+            let cloud = SKSpriteNode(texture: texture)
+            cloud.size.width = cloud.size.width/5
+            cloud.size.height = cloud.size.height/5
+            
+            let startX = -cloud.size.width
+            let maxY = CGFloat(500)
+            let randomY = self.size.height-CGFloat.random(in: 0...maxY)
+            
+            cloud.position = CGPoint(x: startX, y: randomY)
+            self.addChild(cloud)
+            let distance = self.size.width + cloud.size.width * 2
+            let speed = CGFloat.random(in: 20...50)
+            let duration = TimeInterval(distance / speed)
+            
+            let move = SKAction.moveBy(x: distance, y: 0, duration: duration)
+            let remove = SKAction.removeFromParent()
+            cloud.run(SKAction.sequence([move, remove]))
+        }
+        
+        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        let sequence = SKAction.sequence([spawnCloud, wait])
+        let repeatForever = SKAction.repeatForever(sequence)
+        run(repeatForever)
+
         numOfSeeds = 3
+        SeedBad = SKSpriteNode(imageNamed: "Seed_Packet")
+        SeedBad.size = CGSize(width: 90, height: 90)
+        SeedBad.position = CGPoint(x: CGFloat(50) , y: (size.height - 55) )
+        SeedBad.zPosition = 999
+        addChild(SeedBad)
         
         character = SKSpriteNode(texture: idleFrames[0])
         character.size = CGSize(width: 50, height: 50)
         character.position = CGPoint(x: size.width / 2,y: size.height / 2)
+        character.zPosition = 998
         
         
         character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 51))
@@ -287,6 +338,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
             addChild(plant)
             numOfSeeds -= 1
+            
+            SeedText.text = "\(numOfSeeds)"
             print("\(numOfSeeds)")
         }
         
@@ -314,6 +367,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     let grassBlock = SKSpriteNode(imageNamed: "grass")
                     grassBlock.size = tileSize
                     grassBlock.position = position
+                    grassBlock.zPosition = 998
                     grassBlock.physicsBody = SKPhysicsBody(rectangleOf: tileSize)
                     grassBlock.physicsBody?.affectedByGravity = false
                     grassBlock.physicsBody?.isDynamic = false
