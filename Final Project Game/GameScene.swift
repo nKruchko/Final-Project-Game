@@ -289,16 +289,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     func characterDidTouchLava() {
         character.physicsBody?.velocity = .zero
-//        character.physicsBody?.angularVelocity = 0
-//        character.physicsBody?.isDynamic = false
         
-      //  character.run(skacti)
-        
-//        character.position = CGPoint(x: 100, y: 100)
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-//            self.character.physicsBody?.isDynamic = true
-//        }
+        character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
         print("Touched Lava")
     }
     
