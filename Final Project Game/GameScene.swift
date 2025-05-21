@@ -337,6 +337,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     let grassBlock = SKSpriteNode(imageNamed: "grass")
                     grassBlock.size = tileSize
                     grassBlock.position = position
+                    grassBlock.zPosition = 998
                     grassBlock.physicsBody = SKPhysicsBody(rectangleOf: tileSize)
                     grassBlock.physicsBody?.affectedByGravity = false
                     grassBlock.physicsBody?.isDynamic = false
