@@ -1,7 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "Cloud_3.V2.png",
+<<<<<<< HEAD:Final Project Game/Assets.xcassets/Cloud_2.imageset/Contents.json
+      "filename" : "Cloud 2.v3.png",
+=======
+      "filename" : "Cloud_1.v2.png",
+>>>>>>> main:Final Project Game/Assets.xcassets/Cloud_1.imageset/Contents.json
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -159,9 +159,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
        
         
         cloudTextures = [
-            SKTexture(imageNamed: "Cloud_1"),
-            SKTexture(imageNamed: "Cloud_2"),
-            SKTexture(imageNamed: "Cloud_3")
+            SKTexture(imageNamed: "Cloud2"),
+            SKTexture(imageNamed: "Cloud3")
         ]
         
         let spawnCloud = SKAction.run{
