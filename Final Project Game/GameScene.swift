@@ -150,6 +150,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedText.text = "\(3)"
         SeedText.fontName = "Courier-Bold"
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        theGround = SKSpriteNode(color: darkGrassGreen, size: CGSize(width: 500, height: 20))
+        theGround.position = CGPoint(x: size.width / 2, y: 100)
+        theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
+        theGround.physicsBody?.categoryBitMask = PhysicsCategory.ground
+        theGround.physicsBody?.collisionBitMask = PhysicsCategory.character
+        theGround.physicsBody?.node?.name = "theGround"
+        theGround.physicsBody?.affectedByGravity = false
+        theGround.physicsBody?.isDynamic = false
+        theGround.physicsBody?.allowsRotation = false
+        
+        
+        
+        
+        
         addChild(SeedText)
         addChild(ground)
         
@@ -159,8 +182,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
        
         
         cloudTextures = [
-            SKTexture(imageNamed: "Cloud2"),
-            SKTexture(imageNamed: "Cloud3")
+            SKTexture(imageNamed: "Cloud_1"),
+            SKTexture(imageNamed: "Cloud_2"),
+            SKTexture(imageNamed: "Cloud_3")
         ]
         
         let spawnCloud = SKAction.run{
@@ -226,6 +250,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         startIdleAnimation()
         print(frame)
         print(character.position)
+        
+        loadLevel(level1)
         
         lastPosition = character.position
         
@@ -400,7 +426,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     
                 case "P":
                     character.position = position
-                 //   addChild(character)
                     
                 default:
                     break
@@ -421,15 +446,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             }
         }
     
-    override func update(_ currentTime: TimeInterval) {
-        if(score == 0) {
-            loadLevel(level1)
-        }
-        
-        if(score >= 100) {
-            nextLevel()
-        }
-    }
+
 }
     #Preview {
         ContentView()
