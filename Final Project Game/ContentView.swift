@@ -65,14 +65,16 @@ struct ContentView: View {
                         )
                         .position(CGPoint(x: -20, y: 60))
                         
+//
 //                        UseButton(
 //                            gameScene: gameScene,
+//                            effectsVolume: effectsVolume,
 //                            action: {
 //                                gameScene.use()
 //                            }
 //                        )
-//                        .position(CGPoint(x: -20, y: -05))
-
+//                        .position(CGPoint(x: -20, y: 5))
+//                        
 
                         MoveButton(
                             gameScene: gameScene,

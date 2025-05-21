@@ -15,6 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var theGround = SKSpriteNode()
     var plant = SKSpriteNode()
     var numOfSeeds = 0
+    var SeedPickUP = SKSpriteNode()
     var SeedBad = SKSpriteNode()
     var SeedText = SKLabelNode(text: "")
 
@@ -84,6 +85,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedText.fontSize = 30
         SeedText.text = "\(3)"
         SeedText.fontName = "Courier-Bold"
+        
+        makeSeed(xposition: 200, yposition: 130)
         
         addChild(SeedText)
         addChild(ground)
@@ -220,6 +223,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             characterState = "idle"
             startIdleAnimation()
         }
+        
+        if(contact.bodyA.node?.name == "Seed")
+        {
+            contact.bodyA.node?.removeFromParent()
+            numOfSeeds += 1
+            
+            SeedText.text = "\(numOfSeeds)"
+            print("\(numOfSeeds)")
+
+        }
+
     }
     
     func characterDidTouchLava() {
@@ -289,6 +303,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         isOnGround = false
     }
     
+    
+    func makeSeed(xposition:Int,yposition:Int) {
+        SeedPickUP = SKSpriteNode(imageNamed: "Seed")
+        SeedPickUP.size = CGSize(width: 45, height: 45)
+        SeedPickUP.position = CGPoint(x: xposition, y: yposition)
+        SeedPickUP.zPosition = 999
+        
+        SeedPickUP.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 46, height: 46))
+        SeedPickUP.physicsBody?.node?.name = "Seed"
+        SeedPickUP.physicsBody?.collisionBitMask = PhysicsCategory.ground
+        SeedPickUP.physicsBody?.contactTestBitMask = PhysicsCategory.character
+        SeedPickUP.physicsBody?.categoryBitMask = PhysicsCategory.plant
+        SeedPickUP.physicsBody?.allowsRotation = false
+        SeedPickUP.physicsBody?.affectedByGravity = false
+        SeedPickUP.physicsBody?.restitution = 0.0
+        
+        addChild(SeedPickUP)
+    }
     
     func use() {
         print("Use Button Pressed")
