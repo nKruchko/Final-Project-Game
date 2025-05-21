@@ -21,8 +21,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var xVal = 15
     var yVal = 100
     var rep = 0
+    var score = 100
+    var currentLevel = 1
     
     let level1 = [
+        "             ",
+        "             ",
+        "             ",
         "             ",
         "             ",
         "          GGG",
@@ -30,8 +35,68 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         "GGG          ",
         "             ",
         "LLLLLLLLLLLLL",
-
-                
+        
+        
+    ]
+    
+    let level2 = [
+        "             ",
+        "GGG          ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
+    ]
+    
+    let level3 = [
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
+    ]
+    
+    let level4 = [
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
+    ]
+    
+    let level5 = [
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
     ]
     
     var character: SKSpriteNode!
@@ -77,32 +142,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         addChild(ground)
         
-        
-        
-        
-        
-        
-        
-        
-        
-        theGround = SKSpriteNode(color: darkGrassGreen, size: CGSize(width: 500, height: 20))
-        theGround.position = CGPoint(x: size.width / 2, y: 100)
-        theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
-        theGround.physicsBody?.categoryBitMask = PhysicsCategory.ground
-        theGround.physicsBody?.collisionBitMask = PhysicsCategory.character
-        theGround.physicsBody?.node?.name = "theGround"
-        theGround.physicsBody?.affectedByGravity = false
-        theGround.physicsBody?.isDynamic = false
-        theGround.physicsBody?.allowsRotation = false
-        
-        
-        
-        
-        
-        
-        
-        //       addChild(theGround)
-        
     }
     override func didMove(to view: SKView) {
         
@@ -115,8 +154,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 51))
         character.physicsBody?.collisionBitMask = PhysicsCategory.ground
-        character.physicsBody?.contactTestBitMask = PhysicsCategory.lava
-        character.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+        character.physicsBody?.contactTestBitMask = PhysicsCategory.lava | PhysicsCategory.ground
         character.physicsBody?.categoryBitMask = PhysicsCategory.character
         character.physicsBody?.allowsRotation = false
         character.physicsBody?.affectedByGravity = true
@@ -129,11 +167,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         background.alpha = 1.0
         background.name = "background"
         
+        
         addChild(background)
         addChild(character)
         
-        levelOne()
-
+        
         
         startIdleAnimation()
         print(frame)
@@ -141,8 +179,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         lastPosition = character.position
         
+        
     }
     func didBegin(_ contact: SKPhysicsContact) {
+        
         let firstBody: SKPhysicsBody
         let secondBody: SKPhysicsBody
         
@@ -172,28 +212,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     func characterDidTouchLava() {
-        let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+        character.physicsBody?.velocity = .zero
+//        character.physicsBody?.angularVelocity = 0
+//        character.physicsBody?.isDynamic = false
         
-        let wait = SKAction.wait(forDuration: 1)
+      //  character.run(skacti)
         
-        character.run(fadeOut) {
-            self.levelOne()
-        }
-        
-        character.run(wait) {
-            self.resetGame()
-        }
-        
-    }
-    
-    func resetGame() {
-        let fadeIn = SKAction.fadeIn(withDuration: 0.5)
-        
-        if let scene = SKScene(fileNamed: "GameScene") {
-            scene.scaleMode = self.scaleMode
-            self.view?.presentScene(scene, transition: .fade(withDuration: 1.0))
-        }
-        character.run(fadeIn)
+//        character.position = CGPoint(x: 100, y: 100)
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+//            self.character.physicsBody?.isDynamic = true
+//        }
+        print("Touched Lava")
     }
     
     
@@ -234,7 +264,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         character.run(SKAction.group([jumpAnimation, jumpSound]))
         
-        character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 50))
+        character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 45))
         isOnGround = false
     }
     
@@ -269,16 +299,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             startIdleAnimation()
         }
     }
-
-    func levelOne() {
+    
+    func loadLevel(_ levelData: [String]) {
         let tileSize = CGSize(width: 32, height: 32)
-
-        for (rowIndex, row) in level1.reversed().enumerated() {
+        
+        for (rowIndex, row) in levelData.reversed().enumerated() {
             for (colIndex, char) in row.enumerated() {
                 let x = CGFloat(colIndex) * tileSize.width
                 let y = CGFloat(rowIndex) * tileSize.height
                 let position = CGPoint(x: x, y: y)
-
+                
                 switch char {
                 case "G":
                     let grassBlock = SKSpriteNode(imageNamed: "grass")
@@ -301,7 +331,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     dirtBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
                     dirtBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
                     addChild(dirtBlock)
-
+                    
                 case "L":
                     let lava = SKSpriteNode(imageNamed: "lava")
                     lava.size = tileSize
@@ -313,19 +343,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     lava.physicsBody?.contactTestBitMask = PhysicsCategory.character
                     lava.physicsBody?.collisionBitMask = 0
                     addChild(lava)
-
+                    
                     
                 case "P":
                     character.position = position
-
+                 //   addChild(character)
+                    
                 default:
                     break
                 }
             }
         }
     }
-
-
+        
+        func nextLevel() {
+            if currentLevel >= 2 {return}
+            
+            currentLevel += 1
+            switch currentLevel {
+            case 2:
+                loadLevel(level2)
+            default:
+                print("No More Levels")
+            }
+        }
+    
+    override func update(_ currentTime: TimeInterval) {
+        if(score == 0) {
+            loadLevel(level1)
+        }
+        
+        if(score >= 100) {
+            nextLevel()
+        }
+    }
 }
     #Preview {
         ContentView()
