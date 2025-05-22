@@ -28,13 +28,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var rep = 0
     var score = 100
     var currentLevel = 1
+    var lvl1 = true
+    var lvl2 = true
+    var lvl3 = true
+    var lvl4 = true
+    var lvl5 = true
     
     let level1 = [
         "             ",
         "             ",
         "             ",
         "             ",
-        "             ",
+        "           S ",
         "          GGG",
         " P   GGG     ",
         "GGG          ",
@@ -46,12 +51,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     let level2 = [
         "             ",
-        "GGG          ",
         "             ",
         "             ",
+        "           S ",
+        "           G ",
         "             ",
         "             ",
-        " P   GGG     ",
+        "        G    ",
+        "             ",
+        "             ",
+        "     G       ",
+        "             ",
         "GGG          ",
         "             ",
         "LLLLLLLLLLLLL",
@@ -60,13 +70,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     ]
     
     let level3 = [
+        "         S   ",
+        "         G   ",
         "             ",
         "             ",
+        "     G       ",
         "             ",
         "             ",
+        " G           ",
         "             ",
         "             ",
-        " P   GGG     ",
+        "     G       ",
+        "             ",
         "GGG          ",
         "             ",
         "LLLLLLLLLLLLL",
@@ -79,26 +94,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         "             ",
         "             ",
         "             ",
+        "     G       ",
         "             ",
         "             ",
-        " P   GGG     ",
-        "GGG          ",
+        " G           ",
         "             ",
+        "             ",
+        "     G       ",
+        "             ",
+        "GGG        S ",
+        "           G ",
         "LLLLLLLLLLLLL",
         
         
     ]
     
     let level5 = [
+        "      P      ",
+        "     GGG     ",
         "             ",
-        "             ",
-        "             ",
-        "             ",
-        "             ",
-        "             ",
-        " P   GGG     ",
         "GGG          ",
         "             ",
+        "             ",
+        "             ",
+        "      S      ",
+        "      G      ",
         "LLLLLLLLLLLLL",
         
         
@@ -148,7 +168,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedText.position = CGPoint(x: (110) , y: (size.height - 15) )
         SeedText.zPosition = 999
         SeedText.fontSize = 30
-        SeedText.text = "\(3)"
+        SeedText.text = "\(numOfSeeds)"
         SeedText.fontName = "Courier-Bold"
         
         makeSeed(xposition: 200, yposition: 130)
@@ -181,6 +201,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         addChild(SeedText)
         addChild(ground)
         
+        
+        
     }
     var cloudTextures: [SKTexture] = []
     override func didMove(to view: SKView) {
@@ -189,7 +211,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         cloudTextures = [
             SKTexture(imageNamed: "Cloud_1"),
             SKTexture(imageNamed: "Cloud_2"),
-            SKTexture(imageNamed: "Cloud_3")
+            SKTexture(imageNamed: "Cloud_3"),
+            SKTexture(imageNamed: "Cloud_4"),
+            SKTexture(imageNamed: "Cloud_4"),
+            SKTexture(imageNamed: "Cloud_4"),
+
         ]
         
         let spawnCloud = SKAction.run{
@@ -208,17 +234,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             let speed = CGFloat.random(in: 20...50)
             let duration = TimeInterval(distance / speed)
             
-            let move = SKAction.moveBy(x: distance, y: 0, duration: duration)
+            let move = SKAction.moveBy(x: distance, y: CGFloat(Float.random(in: -100...100)), duration: duration)
             let remove = SKAction.removeFromParent()
             cloud.run(SKAction.sequence([move, remove]))
+            if cloud.size.height < 10{
+                cloud.speed = cloud.speed*5
+                cloud.size.width = cloud.size.width*10
+                cloud.size.height = cloud.size.height*10
+
+            }
         }
         
-        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        let wait = SKAction.wait(forDuration: 1.0, withRange: 1.0)
         let sequence = SKAction.sequence([spawnCloud, wait])
         let repeatForever = SKAction.repeatForever(sequence)
         run(repeatForever)
 
-        numOfSeeds = 3
+        //numOfSeeds = 3
         SeedBad = SKSpriteNode(imageNamed: "Seed_Packet")
         SeedBad.size = CGSize(width: 90, height: 90)
         SeedBad.position = CGPoint(x: CGFloat(50) , y: (size.height - 55) )
@@ -256,13 +288,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         print(frame)
         print(character.position)
         
-        loadLevel(level1)
         
         lastPosition = character.position
         
         
     }
     func didBegin(_ contact: SKPhysicsContact) {
+        if(numOfSeeds == 0) {
+            if(lvl1 == true) {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                loadLevel(level1)
+                lvl1 = false
+            }
+        }
+        if(numOfSeeds == 1) {
+            if(lvl2 == true) {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                clearLevel()
+                loadLevel(level2)
+                SeedText.text = "\(numOfSeeds)"
+                lvl2 = false
+            }
+        }
+        if(numOfSeeds == 2) {
+            if(lvl3 == true) {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                clearLevel()
+                loadLevel(level3)
+                SeedText.text = "\(numOfSeeds)"
+                lvl3 = false
+            }
+        }
+
+        if(numOfSeeds == 3) {
+            if(lvl4 == true) {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                clearLevel()
+                loadLevel(level4)
+                SeedText.text = "\(numOfSeeds)"
+                lvl4 = false
+            }
+        }
+
+        if(numOfSeeds == 4) {
+            if(lvl5 == true) {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                clearLevel()
+                loadLevel(level5)
+                SeedText.text = "\(numOfSeeds)"
+                lvl5 = false
+            }
+        }
+
         
         let firstBody: SKPhysicsBody
         let secondBody: SKPhysicsBody
@@ -278,6 +355,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         if firstBody.categoryBitMask == PhysicsCategory.character &&
             secondBody.categoryBitMask == PhysicsCategory.lava {
             characterDidTouchLava()
+        }
+        
+        if firstBody.categoryBitMask == PhysicsCategory.character &&
+            secondBody.categoryBitMask == PhysicsCategory.plant {
+            numOfSeeds += 1
+            plant.removeFromParent()
         }
         
         let skView = SKView()
@@ -412,6 +495,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                 let x = CGFloat(colIndex) * tileSize.width
                 let y = CGFloat(rowIndex) * tileSize.height
                 let position = CGPoint(x: x, y: y)
+                let plantPosition = CGPoint(x: x, y: y)
                 
                 switch char {
                 case "G":
@@ -424,6 +508,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     grassBlock.physicsBody?.isDynamic = false
                     grassBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
                     grassBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
+                    grassBlock.name = "levelNode"
                     addChild(grassBlock)
                     
                 case "D":
@@ -435,6 +520,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     dirtBlock.physicsBody?.isDynamic = false
                     dirtBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
                     dirtBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
+                    dirtBlock.name = "levelNode"
                     addChild(dirtBlock)
                     
                 case "L":
@@ -448,6 +534,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     lava.physicsBody?.contactTestBitMask = PhysicsCategory.character
                     lava.physicsBody?.collisionBitMask = 0
                     addChild(lava)
+                
+                case "S":
+                    plant = SKSpriteNode(texture: growFrames[0])
+                    plant.size = tileSize
+                    plant.position = plantPosition
+        
+                    plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 32, height: 32))
+                    plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
+                    plant.physicsBody?.contactTestBitMask = PhysicsCategory.character
+                    plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
+                    plant.physicsBody?.allowsRotation = false
+                    plant.physicsBody?.affectedByGravity = true
+                    plant.physicsBody?.restitution = 0.0
+                    plant.run((SKAction.animate(with: growFrames, timePerFrame: 1)), withKey: "grow")
+                    addChild(plant)
                     
                     
                 case "P":
@@ -459,19 +560,57 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             }
         }
     }
-        
-        func nextLevel() {
-            if currentLevel >= 2 {return}
-            
-            currentLevel += 1
-            switch currentLevel {
-            case 2:
-                loadLevel(level2)
-            default:
-                print("No More Levels")
+    func clearLevel() {
+        for child in children {
+            if child.name == "levelNode" {
+                child.removeFromParent()
             }
         }
+    }
     
+    
+    
+        func nextLevel() {
+          //  if currentLevel >= 5 {return}
+            print(currentLevel)
+            clearLevel()
+           // switch currentLevel {
+            if currentLevel == 1 {
+                currentLevel += 1
+            }
+            if currentLevel == 2 {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                loadLevel(level2)
+                print("Level 2")
+                currentLevel += 1
+
+            }
+            if currentLevel == 3 {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                loadLevel(level3)
+                print("Level 3")
+                currentLevel += 1
+
+            }
+            if currentLevel == 4 {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                loadLevel(level4)
+                print("Level 4")
+                currentLevel += 1
+
+            }
+            if currentLevel == 5 {
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+                loadLevel(level5)
+                print("Level 5")
+                currentLevel += 1
+
+            }
+            else {
+                print("No More Levels")
+            }
+           // }
+        }
 
 }
     #Preview {
