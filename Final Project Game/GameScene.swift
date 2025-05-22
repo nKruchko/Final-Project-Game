@@ -206,7 +206,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         cloudTextures = [
             SKTexture(imageNamed: "Cloud_1"),
             SKTexture(imageNamed: "Cloud_2"),
-            SKTexture(imageNamed: "Cloud_3")
+            SKTexture(imageNamed: "Cloud_3"),
+            SKTexture(imageNamed: "Cloud_4"),
+            SKTexture(imageNamed: "Cloud_4"),
+            SKTexture(imageNamed: "Cloud_4"),
+
         ]
         
         let spawnCloud = SKAction.run{
@@ -225,12 +229,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             let speed = CGFloat.random(in: 20...50)
             let duration = TimeInterval(distance / speed)
             
-            let move = SKAction.moveBy(x: distance, y: 0, duration: duration)
+            let move = SKAction.moveBy(x: distance, y: CGFloat(Float.random(in: -100...100)), duration: duration)
             let remove = SKAction.removeFromParent()
             cloud.run(SKAction.sequence([move, remove]))
+            if cloud.size.height < 10{
+                cloud.speed = cloud.speed*5
+                cloud.size.width = cloud.size.width*10
+                cloud.size.height = cloud.size.height*10
+
+            }
         }
         
-        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        let wait = SKAction.wait(forDuration: 1.0, withRange: 1.0)
         let sequence = SKAction.sequence([spawnCloud, wait])
         let repeatForever = SKAction.repeatForever(sequence)
         run(repeatForever)
