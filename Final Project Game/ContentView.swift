@@ -51,7 +51,7 @@ struct ContentView: View {
                             action: { gameScene.moveLeft()},
                             onRelease: { gameScene.stopMoving() })
                         .scaleEffect(x:-1)
-                        .position(CGPoint(x: -120, y: 60))
+                        .position(CGPoint(x: -145, y: 60))
 
                         
                         
@@ -63,18 +63,18 @@ struct ContentView: View {
                                 gameScene.jump()
                             }
                         )
-                        .position(CGPoint(x: -20, y: 60))
+                        .position(CGPoint(x: -50, y: 60))
                         
 //
-//                        UseButton(
-//                            gameScene: gameScene,
-//                            effectsVolume: effectsVolume,
-//                            action: {
-//                                gameScene.use()
-//                            }
-//                        )
-//                        .position(CGPoint(x: -20, y: 5))
-//                        
+                        UseButton(
+                            gameScene: gameScene,
+                            effectsVolume: effectsVolume,
+                            action: {
+                                gameScene.use()
+                            }
+                        )
+                        .position(CGPoint(x: 50, y: 60))
+                        
 
                         MoveButton(
                             gameScene: gameScene,
@@ -82,7 +82,7 @@ struct ContentView: View {
                             action: { gameScene.moveRight() },
                             onRelease: { gameScene.stopMoving() }
                         )
-                        .position(CGPoint(x: 100, y: 60))
+                        .position(CGPoint(x: 145, y: 60))
 
                     }//end hstack
                     .frame(width: 0, height: 100)
