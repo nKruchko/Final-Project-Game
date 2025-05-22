@@ -26,8 +26,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var xVal = 15
     var yVal = 100
     var rep = 0
+    var score = 100
+    var currentLevel = 1
     
     let level1 = [
+        "             ",
+        "             ",
+        "             ",
         "             ",
         "             ",
         "          GGG",
@@ -35,8 +40,68 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         "GGG          ",
         "             ",
         "LLLLLLLLLLLLL",
-
-                
+        
+        
+    ]
+    
+    let level2 = [
+        "             ",
+        "GGG          ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
+    ]
+    
+    let level3 = [
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
+    ]
+    
+    let level4 = [
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
+    ]
+    
+    let level5 = [
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        " P   GGG     ",
+        "GGG          ",
+        "             ",
+        "LLLLLLLLLLLLL",
+        
+        
     ]
     
     var character: SKSpriteNode!
@@ -113,9 +178,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         
         
-        
-        
-        //       addChild(theGround)
+        addChild(SeedText)
+        addChild(ground)
         
     }
     var cloudTextures: [SKTexture] = []
@@ -169,8 +233,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         character.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 40, height: 51))
         character.physicsBody?.collisionBitMask = PhysicsCategory.ground
-        character.physicsBody?.contactTestBitMask = PhysicsCategory.lava
-        character.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+        character.physicsBody?.contactTestBitMask = PhysicsCategory.lava | PhysicsCategory.ground
         character.physicsBody?.categoryBitMask = PhysicsCategory.character
         character.physicsBody?.allowsRotation = false
         character.physicsBody?.affectedByGravity = true
@@ -183,20 +246,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         background.alpha = 1.0
         background.name = "background"
         
+        
         addChild(background)
         addChild(character)
         
-        levelOne()
-
+        
         
         startIdleAnimation()
         print(frame)
         print(character.position)
         
+        loadLevel(level1)
+        
         lastPosition = character.position
+        
         
     }
     func didBegin(_ contact: SKPhysicsContact) {
+        
         let firstBody: SKPhysicsBody
         let secondBody: SKPhysicsBody
         
@@ -237,28 +304,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     func characterDidTouchLava() {
-        let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+        character.physicsBody?.velocity = .zero
         
-        let wait = SKAction.wait(forDuration: 1)
-        
-        character.run(fadeOut) {
-            self.levelOne()
-        }
-        
-        character.run(wait) {
-            self.resetGame()
-        }
-        
-    }
-    
-    func resetGame() {
-        let fadeIn = SKAction.fadeIn(withDuration: 0.5)
-        
-        if let scene = SKScene(fileNamed: "GameScene") {
-            scene.scaleMode = self.scaleMode
-            self.view?.presentScene(scene, transition: .fade(withDuration: 1.0))
-        }
-        character.run(fadeIn)
+        character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+        print("Touched Lava")
     }
     
     
@@ -299,7 +348,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         
         character.run(SKAction.group([jumpAnimation, jumpSound]))
         
-        character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 50))
+        character.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 45))
         isOnGround = false
     }
     
@@ -354,16 +403,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             startIdleAnimation()
         }
     }
-
-    func levelOne() {
+    
+    func loadLevel(_ levelData: [String]) {
         let tileSize = CGSize(width: 32, height: 32)
-
-        for (rowIndex, row) in level1.reversed().enumerated() {
+        
+        for (rowIndex, row) in levelData.reversed().enumerated() {
             for (colIndex, char) in row.enumerated() {
                 let x = CGFloat(colIndex) * tileSize.width
                 let y = CGFloat(rowIndex) * tileSize.height
                 let position = CGPoint(x: x, y: y)
-
+                
                 switch char {
                 case "G":
                     let grassBlock = SKSpriteNode(imageNamed: "grass")
@@ -387,7 +436,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     dirtBlock.physicsBody?.categoryBitMask = PhysicsCategory.ground
                     dirtBlock.physicsBody?.collisionBitMask = PhysicsCategory.character
                     addChild(dirtBlock)
-
+                    
                 case "L":
                     let lava = SKSpriteNode(imageNamed: "lava")
                     lava.size = tileSize
@@ -399,18 +448,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     lava.physicsBody?.contactTestBitMask = PhysicsCategory.character
                     lava.physicsBody?.collisionBitMask = 0
                     addChild(lava)
-
+                    
                     
                 case "P":
                     character.position = position
-
+                    
                 default:
                     break
                 }
             }
         }
     }
-
+        
+        func nextLevel() {
+            if currentLevel >= 2 {return}
+            
+            currentLevel += 1
+            switch currentLevel {
+            case 2:
+                loadLevel(level2)
+            default:
+                print("No More Levels")
+            }
+        }
+    
 
 }
     #Preview {
