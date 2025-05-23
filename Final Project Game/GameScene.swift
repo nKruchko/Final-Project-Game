@@ -15,6 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var theGround = SKSpriteNode()
     var plant = SKSpriteNode()
     var numOfSeeds = 0
+    var SeedPickUP = SKSpriteNode()
     var SeedBad = SKSpriteNode()
     var SeedText = SKLabelNode(text: "")
 
@@ -188,6 +189,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedText.fontName = "Courier-Bold"
         
         
+        addChild(SeedText)
+        addChild(ground)
+        
         
         
         
@@ -227,7 +231,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         cloudTextures = [
             SKTexture(imageNamed: "Cloud_1"),
             SKTexture(imageNamed: "Cloud_2"),
-            SKTexture(imageNamed: "Cloud_3")
+            SKTexture(imageNamed: "Cloud_3"),
+            SKTexture(imageNamed: "Cloud_4"),
+            SKTexture(imageNamed: "Cloud_4"),
+            SKTexture(imageNamed: "Cloud_4"),
+
         ]
         
         let spawnCloud = SKAction.run{
@@ -247,12 +255,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             let speed = CGFloat.random(in: 20...50)
             let duration = TimeInterval(distance / speed)
             
-            let move = SKAction.moveBy(x: distance, y: 0, duration: duration)
+            let move = SKAction.moveBy(x: distance, y: CGFloat(Float.random(in: -100...100)), duration: duration)
             let remove = SKAction.removeFromParent()
             cloud.run(SKAction.sequence([move, remove]))
+            if cloud.size.height < 10{
+                cloud.speed = cloud.speed*5
+                cloud.size.width = cloud.size.width*10
+                cloud.size.height = cloud.size.height*10
+
+            }
         }
         
-        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        let wait = SKAction.wait(forDuration: 1.0, withRange: 1.0)
         let sequence = SKAction.sequence([spawnCloud, wait])
         let repeatForever = SKAction.repeatForever(sequence)
         run(repeatForever)
@@ -389,6 +403,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             characterState = "idle"
             startIdleAnimation()
         }
+        
+        if(contact.bodyA.node?.name == "Seed")
+        {
+            contact.bodyA.node?.removeFromParent()
+            numOfSeeds += 1
+            
+            SeedText.text = "\(numOfSeeds)"
+            print("\(numOfSeeds)")
+
+        }
+
     }
     
     func characterDidTouchLava() {
@@ -446,30 +471,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     
-//    func use() {
-//        print("Use Button Pressed")
-//        if(numOfSeeds>0)
-//        {
-//            plant = SKSpriteNode(texture: growFrames[0])
-//            plant.size = CGSize(width: 50, height: 50)
-//            plant.position = character.position
-//            
-//            plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
-//            plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
-//            plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
-//            plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
-//            plant.physicsBody?.allowsRotation = false
-//            plant.physicsBody?.affectedByGravity = true
-//            plant.physicsBody?.restitution = 0.0
-//            plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
-//            addChild(plant)
-//            numOfSeeds -= 1
-//            
-//            SeedText.text = "\(numOfSeeds)"
-//            print("\(numOfSeeds)")
-//        }
-//        
-//    }
+    
+    func use() {
+        print("Use Button Pressed")
+        if(numOfSeeds>0)
+        {
+            plant = SKSpriteNode(texture: growFrames[0])
+            plant.size = CGSize(width: 50, height: 50)
+            plant.position = character.position
+            
+            plant.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 51, height: 51))
+            plant.physicsBody?.collisionBitMask = PhysicsCategory.ground
+            plant.physicsBody?.contactTestBitMask = PhysicsCategory.ground
+            plant.physicsBody?.categoryBitMask = PhysicsCategory.plant
+            plant.physicsBody?.allowsRotation = false
+            plant.physicsBody?.affectedByGravity = true
+            plant.physicsBody?.restitution = 0.0
+            plant.run((SKAction.animate(with: growFrames, timePerFrame: 3)), withKey: "grow")
+            addChild(plant)
+            numOfSeeds -= 1
+            
+            SeedText.text = "\(numOfSeeds)"
+            print("\(numOfSeeds)")
+        }
+        
+    }
     
     func stopMoving() {
         if characterState != "idle" {
@@ -546,6 +572,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     
                 case "P":
                     character.position = position
+                    
+                case "M":
+                    SeedPickUP = SKSpriteNode(imageNamed: "Seed")
+                    SeedPickUP.size = CGSize(width: 45, height: 45)
+                    SeedPickUP.position = position
+                    SeedPickUP.zPosition = 999
+                    
+                    SeedPickUP.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 46, height: 46))
+                    SeedPickUP.physicsBody?.node?.name = "Seed"
+                    SeedPickUP.physicsBody?.collisionBitMask = PhysicsCategory.ground
+                    SeedPickUP.physicsBody?.contactTestBitMask = PhysicsCategory.character
+                    SeedPickUP.physicsBody?.categoryBitMask = PhysicsCategory.plant
+                    SeedPickUP.physicsBody?.allowsRotation = false
+                    SeedPickUP.physicsBody?.affectedByGravity = false
+                    SeedPickUP.physicsBody?.restitution = 0.0
+                    addChild(SeedPickUP)
                     
                 default:
                     break
