@@ -441,7 +441,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             character.run(SKAction.move(to: CGPoint(x: 40, y: 250), duration: 0.01))
 
         }
+        run(SKAction.playSoundFileNamed("FarmerDeath", waitForCompletion: false))
         print("Touched Lava")
+
     }
     
     
