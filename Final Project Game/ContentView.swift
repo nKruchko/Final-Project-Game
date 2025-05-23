@@ -63,18 +63,18 @@ struct ContentView: View {
                                 gameScene.jump()
                             }
                         )
-                        .position(CGPoint(x: -50, y: 60))
+                        .position(CGPoint(x: -15, y: 60))
                         
 //
-                        UseButton(
-                            gameScene: gameScene,
-                            effectsVolume: effectsVolume,
-                            action: {
-                                gameScene.use()
-                            }
-                        )
-                        .position(CGPoint(x: 50, y: 60))
-                        
+//                        UseButton(
+//                            gameScene: gameScene,
+//                            effectsVolume: effectsVolume,
+//                            action: {
+//                                gameScene.use()
+//                            }
+//                        )
+//                        .position(CGPoint(x: 50, y: 60))
+//                        
 
                         MoveButton(
                             gameScene: gameScene,
@@ -195,34 +195,34 @@ struct JumpButton: View {
     }
 }
 
-struct UseButton: View {
-    let gameScene: GameScene
-    let effectsVolume: Int
-    @State private var isPressed = false
-    let action: () -> Void
-
-    var body: some View {
-        Image(isPressed ? "B_Use_0" : "B_Use_1")
-            .resizable()
-            .frame(width: 120, height: 120)
-            .offset(x:-10)
-            .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in
-                        if !isPressed {
-                            isPressed = true
-                            playEffect("clickIn", on: gameScene, volume: effectsVolume)
-                            action()
-                        }
-                    }
-                    .onEnded { _ in
-                        isPressed = false
-                        playEffect("clickOut", on: gameScene, volume: effectsVolume)
-                    }
-            )
-            .offset(y:-16)
-    }
-}
+//struct UseButton: View {
+//    let gameScene: GameScene
+//    let effectsVolume: Int
+//    @State private var isPressed = false
+//    let action: () -> Void
+//
+//    var body: some View {
+//        Image(isPressed ? "B_Use_0" : "B_Use_1")
+//            .resizable()
+//            .frame(width: 120, height: 120)
+//            .offset(x:-10)
+//            .gesture(
+//                DragGesture(minimumDistance: 0)
+//                    .onChanged { _ in
+//                        if !isPressed {
+//                            isPressed = true
+//                            playEffect("clickIn", on: gameScene, volume: effectsVolume)
+//                            action()
+//                        }
+//                    }
+//                    .onEnded { _ in
+//                        isPressed = false
+//                        playEffect("clickOut", on: gameScene, volume: effectsVolume)
+//                    }
+//            )
+//            .offset(y:-16)
+//    }
+//}
 struct volumeButton: View{
     @Binding var level: Int
     let onChange: (Int) -> Void

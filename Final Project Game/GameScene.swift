@@ -188,9 +188,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedText.text = "\(numOfSeeds)"
         SeedText.fontName = "Courier-Bold"
         
-        
-        addChild(SeedText)
-        addChild(ground)
+    
         
         
         
