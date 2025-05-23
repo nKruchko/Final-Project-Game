@@ -655,3 +655,92 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         ContentView()
     }
     
+//let level1 = [
+//    "             ",
+//    "             ",
+//    "             ",
+//    "             ",
+//    "           S ",
+//    "          GGG",
+//    " P   GGG  DDD ",
+//    "GGG  DDD   D ",
+//    "DDD   D      ",
+//    "LLLLLLLLLLLLL",
+//    
+//    
+//]
+//
+//let level2 = [
+//    "             ",
+//    "             ",
+//    "             ",
+//    "           S ",
+//    "           G ",
+//    "           D ",
+//    "           D ",
+//    "        G  D ",
+//    "        D  D ",
+//    "        D  D ",
+//    "     G  D  D ",
+//    "     D  D  D ",
+//    "GGG  D  D  D ",
+//    "DDDLLDLLDLLDL",
+//    "LLLLLLLLLLLLL",
+//    
+//    
+//]
+//
+//let level3 = [
+//    "         S   ",
+//    "         G   ",
+//    "        DDD  ",
+//    "       GDDDG ",
+//    "     GGDDDDDG",
+//    "         DDDD",
+//    "         DDDD",
+//    "GG       DDDD",
+//    "D        DDDD",
+//    "       GGDDDD",
+//    "     GGDDDDDD",
+//    "       DDDDDD",
+//    "GGG     DDDDD",
+//    "DDLLLLLLDDDDD",
+//    "LLLLLLLLLLLLL",
+//    
+//    
+//]
+//
+//let level4 = [
+//    "             ",
+//    "             ",
+//    "             ",
+//    "             ",
+//    "     G       ",
+//    "             ",
+//    "             ",
+//    " G           ",
+//    "             ",
+//    "             ",
+//    "     G       ",
+//    "             ",
+//    "GGG        S ",
+//    "           G ",
+//    "LLLLLLLLLLLLL",
+//    
+//    
+//]
+//
+//let level5 = [
+//    "      P      ",
+//    "     GGG     ",
+//    "             ",
+//    "GGG          ",
+//    "             ",
+//    "             ",
+//    "             ",
+//    "      S      ",
+//    "      G      ",
+//    "LLLLLLLLLLLLL",
+//    
+//    
+//]
