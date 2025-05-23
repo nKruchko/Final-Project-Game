@@ -32,6 +32,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var lvl3 = true
     var lvl4 = true
     var lvl5 = true
+    var lvl6 = true
+    var winLabel = SKLabelNode(text: "You Win")
     
     let level1 = [
         "             ",
@@ -95,14 +97,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         "             ",
         "     G       ",
         "             ",
-        "             ",
-        " G           ",
-        "             ",
-        "             ",
-        "     G       ",
-        "             ",
-        "GGG        S ",
-        "           G ",
+        "        L    ",
+        " G      L    ",
+        "        L    ",
+        "        L    ",
+        "     G  L    ",
+        "        L    ",
+        "GGG     L  S ",
+        "        L  G ",
         "LLLLLLLLLLLLL",
         
         
@@ -111,14 +113,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     let level5 = [
         "      P      ",
         "     GGG     ",
-        "             ",
-        "GGG          ",
-        "             ",
-        "             ",
-        "             ",
-        "      S      ",
-        "      G      ",
+        "    LLLL     ",
+        "GGGLL        ",
+        "   L         ",
+        "   L         ",
+        "   L         ",
+        "   L   S     ",
+        "   L   G     ",
         "LLLLLLLLLLLLL",
+        
+        
+    ]
+    
+    let level6 = [
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "             ",
+        "S S S   S S S",
+        "GGGGGGGGGGGGG",
+        "DDDDDDDDDDDDD",
         
         
     ]
@@ -189,7 +206,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         theGround.physicsBody?.isDynamic = false
         theGround.physicsBody?.allowsRotation = false
         
-        
+        winLabel = SKLabelNode(text: "You win")
+        winLabel.position = CGPoint(x: 200, y: 350)
+        winLabel.fontSize = 100
+        winLabel.fontColor = .green
+        winLabel.fontName = "MarkerFelt"
         
         
         
@@ -214,6 +235,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
             let cloud = SKSpriteNode(texture: texture)
             cloud.size.width = cloud.size.width/5
             cloud.size.height = cloud.size.height/5
+            cloud.zPosition = -100
             
             let startX = -cloud.size.width
             let maxY = CGFloat(500)
@@ -288,8 +310,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
         if(numOfSeeds == 1) {
             if(lvl2 == true) {
-                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 clearLevel()
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 loadLevel(level2)
                 SeedText.text = "\(numOfSeeds)"
                 lvl2 = false
@@ -297,8 +319,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
         if(numOfSeeds == 2) {
             if(lvl3 == true) {
-                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 clearLevel()
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 loadLevel(level3)
                 SeedText.text = "\(numOfSeeds)"
                 lvl3 = false
@@ -307,8 +329,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 
         if(numOfSeeds == 3) {
             if(lvl4 == true) {
-                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 clearLevel()
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 loadLevel(level4)
                 SeedText.text = "\(numOfSeeds)"
                 lvl4 = false
@@ -317,14 +339,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
 
         if(numOfSeeds == 4) {
             if(lvl5 == true) {
-                character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 clearLevel()
+                character.run(SKAction.move(to: CGPoint(x: 40, y: 250), duration: 0.01))
                 loadLevel(level5)
                 SeedText.text = "\(numOfSeeds)"
                 lvl5 = false
             }
         }
-
+        if(numOfSeeds == 5) {
+            if(lvl6 == true) {
+                clearLevel()
+                character.run(SKAction.move(to: CGPoint(x: 200, y: 125), duration: 0.01))
+                loadLevel(level6)
+                SeedText.text = "\(numOfSeeds)"
+                lvl6 = false
+                addChild(winLabel)
+            }
+        }
         
         let firstBody: SKPhysicsBody
         let secondBody: SKPhysicsBody
@@ -362,8 +393,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     
     func characterDidTouchLava() {
         character.physicsBody?.velocity = .zero
-        
-        character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+        if(numOfSeeds != 4) {
+            character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
+        }
+        else {
+            character.run(SKAction.move(to: CGPoint(x: 40, y: 250), duration: 0.01))
+
+        }
         print("Touched Lava")
     }
     
@@ -489,6 +525,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     lava.physicsBody?.categoryBitMask = PhysicsCategory.lava
                     lava.physicsBody?.contactTestBitMask = PhysicsCategory.character
                     lava.physicsBody?.collisionBitMask = 0
+                    lava.name = "levelNode"
                     addChild(lava)
                 
                 case "S":
@@ -561,6 +598,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                 print("Level 5")
                 currentLevel += 1
 
+            }
+            if currentLevel == 6 {
+                character.run(SKAction.move(to: CGPoint(x: 200, y: 125), duration: 0.01))
+                loadLevel(level6)
+                print("Level 6")
             }
             else {
                 print("No More Levels")
