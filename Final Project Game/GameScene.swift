@@ -199,25 +199,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedText.text = "\(numOfSeeds)"
         SeedText.fontName = "Courier-Bold"
         
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        theGround = SKSpriteNode(color: darkGrassGreen, size: CGSize(width: 500, height: 20))
-        theGround.position = CGPoint(x: size.width / 2, y: 100)
-        theGround.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 20))
-        theGround.physicsBody?.categoryBitMask = PhysicsCategory.ground
-        theGround.physicsBody?.collisionBitMask = PhysicsCategory.character
-        theGround.physicsBody?.node?.name = "theGround"
-        theGround.physicsBody?.affectedByGravity = false
-        theGround.physicsBody?.isDynamic = false
-        theGround.physicsBody?.allowsRotation = false
         
         winLabel = SKLabelNode(text: "You win")
         winLabel.position = CGPoint(x: 200, y: 350)
