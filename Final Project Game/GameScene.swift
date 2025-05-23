@@ -171,7 +171,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         SeedText.text = "\(numOfSeeds)"
         SeedText.fontName = "Courier-Bold"
         
-        makeSeed(xposition: 200, yposition: 130)
         
         addChild(SeedText)
         addChild(ground)
@@ -436,23 +435,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     }
     
     
-    func makeSeed(xposition:Int,yposition:Int) {
-        SeedPickUP = SKSpriteNode(imageNamed: "Seed")
-        SeedPickUP.size = CGSize(width: 45, height: 45)
-        SeedPickUP.position = CGPoint(x: xposition, y: yposition)
-        SeedPickUP.zPosition = 999
-        
-        SeedPickUP.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 46, height: 46))
-        SeedPickUP.physicsBody?.node?.name = "Seed"
-        SeedPickUP.physicsBody?.collisionBitMask = PhysicsCategory.ground
-        SeedPickUP.physicsBody?.contactTestBitMask = PhysicsCategory.character
-        SeedPickUP.physicsBody?.categoryBitMask = PhysicsCategory.plant
-        SeedPickUP.physicsBody?.allowsRotation = false
-        SeedPickUP.physicsBody?.affectedByGravity = false
-        SeedPickUP.physicsBody?.restitution = 0.0
-        
-        addChild(SeedPickUP)
-    }
     
     func use() {
         print("Use Button Pressed")
@@ -553,6 +535,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
                     
                 case "P":
                     character.position = position
+                    
+                case "M":
+                    SeedPickUP = SKSpriteNode(imageNamed: "Seed")
+                    SeedPickUP.size = CGSize(width: 45, height: 45)
+                    SeedPickUP.position = position
+                    SeedPickUP.zPosition = 999
+                    
+                    SeedPickUP.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 46, height: 46))
+                    SeedPickUP.physicsBody?.node?.name = "Seed"
+                    SeedPickUP.physicsBody?.collisionBitMask = PhysicsCategory.ground
+                    SeedPickUP.physicsBody?.contactTestBitMask = PhysicsCategory.character
+                    SeedPickUP.physicsBody?.categoryBitMask = PhysicsCategory.plant
+                    SeedPickUP.physicsBody?.allowsRotation = false
+                    SeedPickUP.physicsBody?.affectedByGravity = false
+                    SeedPickUP.physicsBody?.restitution = 0.0
+                    addChild(SeedPickUP)
                     
                 default:
                     break
