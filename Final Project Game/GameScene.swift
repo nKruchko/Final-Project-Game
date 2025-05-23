@@ -35,6 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     var lvl5 = true
     var lvl6 = true
     var winLabel = SKLabelNode(text: "You Win")
+    var startLabel = SKLabelNode(text: "Collect the sunflowers")
     
     let level1 = [
         "             ",
@@ -114,8 +115,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     let level5 = [
         "      P      ",
         "     GGG     ",
-        "    LLLL     ",
-        "GGGLL        ",
+        "     LLL     ",
+        "GGG L        ",
         "   L         ",
         "   L         ",
         "   L         ",
@@ -127,10 +128,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     ]
     
     let level6 = [
+        "          S  ",
+        "          G  ",
+        "   S         ",
+        "   G         ",
         "             ",
         "             ",
+        "      S      ",
+        "      G      ",
         "             ",
+        "        S    ",
+        "        G    ",
         "             ",
+        " S           ",
+        " G           ",
         "             ",
         "             ",
         "             ",
@@ -214,8 +225,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         winLabel.fontColor = .green
         winLabel.fontName = "MarkerFelt"
         
+        startLabel = SKLabelNode(text: "Collect the Sunflowers")
+        startLabel.position = CGPoint(x: 200, y: 200)
+        startLabel.fontSize = 30
+        startLabel.fontColor = .green
+        startLabel.fontName = "MarkerFelt"
         
         
+        addChild(startLabel)
         addChild(SeedText)
         addChild(ground)
         
@@ -322,6 +339,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         }
         if(numOfSeeds == 1) {
             if(lvl2 == true) {
+                startLabel.removeFromParent()
                 clearLevel()
                 character.run(SKAction.move(to: CGPoint(x: 40, y: 125), duration: 0.01))
                 loadLevel(level2)
