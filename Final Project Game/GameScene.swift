@@ -237,8 +237,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
         let spawnCloud = SKAction.run{
             let texture = self.cloudTextures.randomElement()!
             let cloud = SKSpriteNode(texture: texture)
-            cloud.size.width = cloud.size.width/5
-            cloud.size.height = cloud.size.height/5
+            cloud.size.width = (cloud.size.width/5)*CGFloat.random(in: 0.8...1.5)
+            cloud.size.height = (cloud.size.height/5)*CGFloat.random(in: 0.8...1.5)
             cloud.zPosition = -100
             
             let startX = -cloud.size.width
